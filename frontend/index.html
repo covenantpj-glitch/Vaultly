@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vaultly | Personal Finance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --black2: #111111;
+      --black3: #1a1a1a;
+      --black4: #222222;
+      --border: #2a2a2a;
+      --border2: #333333;
+      --metal-light: #c8c8c8;
+      --metal: #a0a0a0;
+      --metal-dark: #707070;
+      --white: #f0f0f0;
+      --white2: #d8d8d8;
+      --green-text: #7ab87a;
+      --red-text: #b87a7a;
+      --gold: #c9a84c;
+      --gold2: #e8c97a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      min-height: 100vh;
+    }
+
+    .metal-text {
+      background: linear-gradient(135deg, #ffffff 0%, #c0c0c0 30%, #808080 60%, #c0c0c0 80%, #ffffff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black2); }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+    /* AUTH */
+    #auth-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #auth-screen::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      border: 1px solid rgba(200,200,200,0.04);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .auth-box {
+      background: var(--black2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 3rem;
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .auth-box::before, .auth-box::after {
+      content: '';
+      position: absolute;
+      width: 16px; height: 16px;
+    }
+
+    .auth-box::before {
+      top: -1px; left: -1px;
+      border-top: 2px solid var(--metal);
+      border-left: 2px solid var(--metal);
+    }
+
+    .auth-box::after {
+      bottom: -1px; right: -1px;
+      border-bottom: 2px solid var(--metal);
+      border-right: 2px solid var(--metal);
+    }
+
+    .auth-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+
+    .auth-divider {
+      width: 40px; height: 1px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      margin: 0.8rem 0 1.5rem;
+    }
+
+    .auth-sub {
+      color: var(--metal-dark);
+      font-size: 0.72rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+    }
+
+    .auth-tabs {
+      display: flex;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 0.7rem;
+      border: none;
+      border-bottom: 2px solid transparent;
+      background: transparent;
+      color: var(--metal-dark);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: -1px;
+    }
+
+    .auth-tab.active { color: var(--white); border-bottom-color: var(--metal); }
+
+    .form-group { margin-bottom: 1.2rem; }
+
+    label {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--metal-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    input, select {
+      width: 100%;
+      background: var(--black3);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 0.75rem 1rem;
+      color: var(--white);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 300;
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none;
+    }
+
+    input:focus, select:focus { border-color: var(--metal); }
+    input::placeholder { color: var(--border2); }
+
+    .btn {
+      width: 100%;
+      background: linear-gradient(135deg, #d0d0d0, #ffffff, #d0d0d0);
+      color: var(--black);
+      border: none;
+      padding: 0.85rem;
+      border-radius: 2px;
+      font-weight: 700;
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      transition: all 0.2s;
+      margin-top: 0.8rem;
+    }
+
+    .btn:hover { background: linear-gradient(135deg, #ffffff, #e0e0e0, #ffffff); }
+
+    .error-msg {
+      color: var(--red-text);
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+      margin-top: 0.8rem;
+      text-align: center;
+    }
+
+    /* APP */
+    #app-screen { display: none; min-height: 100vh; }
+
+    .layout { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 220px;
+      background: var(--black2);
+      border-right: 1px solid var(--border);
+      padding: 2rem 0;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+    }
+
+    .sidebar-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 1.3rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 0 1.5rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-accent {
+      width: 24px; height: 1px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      margin: 0.5rem 1.5rem 0;
+    }
+
+    .sidebar-user {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-user-label {
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--metal-dark);
+      margin-bottom: 0.3rem;
+    }
+
+    .sidebar-user-name {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--white);
+    }
+
+    .nav-section { padding: 1.5rem 0; flex: 1; }
+
+    .nav-section-label {
+      font-size: 0.58rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--border2);
+      padding: 0 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.75rem 1.5rem;
+      color: var(--metal-dark);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: 'Montserrat', sans-serif;
+      text-transform: uppercase;
+      position: relative;
+    }
+
+    .nav-item::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--gold), var(--gold2));
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .nav-item:hover { color: var(--white2); }
+    .nav-item.active { color: var(--white); }
+    .nav-item.active::before { opacity: 1; }
+
+    .sidebar-footer {
+      padding: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .logout-btn {
+      color: var(--metal-dark) !important;
+      font-size: 0.68rem !important;
+      padding: 0.5rem 0 !important;
+      width: auto !important;
+      letter-spacing: 2px !important;
+    }
+
+    .logout-btn:hover { color: var(--red-text) !important; }
+
+    .main { margin-left: 220px; padding: 3rem; flex: 1; }
+
+    .page { display: none; animation: fadeIn 0.3s ease; }
+    .page.active { display: block; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .page-header { margin-bottom: 2.5rem; }
+
+    .page-eyebrow {
+      font-size: 0.6rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 2.5rem;
+      letter-spacing: 1px;
+      line-height: 1;
+    }
+
+    .page-rule {
+      width: 50px; height: 1px;
+      background: linear-gradient(90deg, var(--metal), transparent);
+      margin-top: 1rem;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-bottom: 3rem;
+    }
+
+    .summary-card {
+      background: var(--black2);
+      padding: 2rem;
+    }
+
+    .summary-label {
+      font-size: 0.6rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--metal-dark);
+      margin-bottom: 1rem;
+    }
+
+    .summary-amount {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 600;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .summary-amount.income { color: var(--green-text); }
+    .summary-amount.expense { color: var(--red-text); }
+    .summary-amount.balance { color: var(--white); }
+
+    .summary-sub {
+      font-size: 0.62rem;
+      letter-spacing: 1px;
+      color: var(--border2);
+      margin-top: 0.5rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-title {
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--metal);
+    }
+
+    .filter-select {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--metal-dark);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 0.4rem 0.8rem;
+      outline: none;
+      cursor: pointer;
+      width: auto;
+    }
+
+    .transactions-list { display: flex; flex-direction: column; }
+
+    .tx-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: padding-left 0.2s;
+    }
+
+    .tx-item:hover { padding-left: 0.5rem; }
+    .tx-item:last-child { border-bottom: none; }
+
+    .tx-left { display: flex; align-items: center; gap: 1.2rem; }
+
+    .tx-marker {
+      width: 2px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+
+    .tx-marker.income { background: linear-gradient(180deg, var(--green-text), transparent); }
+    .tx-marker.expense { background: linear-gradient(180deg, var(--red-text), transparent); }
+
+    .tx-desc {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--white2);
+      letter-spacing: 0.5px;
+    }
+
+    .tx-meta {
+      font-size: 0.62rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--metal-dark);
+      margin-top: 0.2rem;
+    }
+
+    .tx-right { display: flex; align-items: center; gap: 2rem; }
+
+    .tx-amount {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .tx-amount.income { color: var(--green-text); }
+    .tx-amount.expense { color: var(--red-text); }
+
+    .tx-delete {
+      background: none;
+      border: none;
+      color: var(--border2);
+      cursor: pointer;
+      font-size: 0.62rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-family: 'Montserrat', sans-serif;
+      padding: 0.3rem;
+      transition: color 0.2s;
+    }
+
+    .tx-delete:hover { color: var(--red-text); }
+
+    .empty-state {
+      padding: 4rem 0;
+      text-align: center;
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--border2);
+    }
+
+    .add-form {
+      border: 1px solid var(--border);
+      padding: 2.5rem;
+      position: relative;
+    }
+
+    .add-form::before, .add-form::after {
+      content: '';
+      position: absolute;
+      width: 12px; height: 12px;
+    }
+
+    .add-form::before {
+      top: -1px; right: -1px;
+      border-top: 1px solid var(--metal-dark);
+      border-right: 1px solid var(--metal-dark);
+    }
+
+    .add-form::after {
+      bottom: -1px; left: -1px;
+      border-bottom: 1px solid var(--metal-dark);
+      border-left: 1px solid var(--metal-dark);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .add-btn {
+      background: transparent;
+      border: 1px solid var(--metal-dark);
+      color: var(--white);
+      padding: 0.8rem 2.5rem;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    .add-btn:hover {
+      background: var(--white);
+      color: var(--black);
+      border-color: var(--white);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      padding: 1rem 1.5rem;
+      border-left: 2px solid var(--metal);
+      background: var(--black2);
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+      transform: translateX(120%);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 1000;
+    }
+
+    .toast.show { transform: translateX(0); opacity: 1; }
+    .toast.success { border-left-color: var(--green-text); color: var(--green-text); }
+    .toast.error { border-left-color: var(--red-text); color: var(--red-text); }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 1.5rem; }
+      .summary-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="auth-screen">
+  <div class="auth-box">
+    <div class="auth-logo metal-text">Vaultly</div>
+    <div class="auth-divider"></div>
+    <div class="auth-sub">Personal Finance Tracker</div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+      <button class="auth-tab" onclick="switchTab('register')">Register</button>
+    </div>
+
+    <div id="login-form">
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="login-email" placeholder="your@email.com"/>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••"/>
+      </div>
+      <button class="btn" onclick="login()">Enter →</button>
+      <div class="error-msg" id="login-error"></div>
+    </div>
+
+    <div id="register-form" style="display:none">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="reg-name" placeholder="John Smith"/>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="reg-email" placeholder="your@email.com"/>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="reg-password" placeholder="••••••••"/>
+      </div>
+      <button class="btn" onclick="register()">Create Account →</button>
+      <div class="error-msg" id="reg-error"></div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app-screen">
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-logo metal-text">VT</div>
+      <div class="sidebar-accent"></div>
+      <div class="sidebar-user">
+        <div class="sidebar-user-label">Signed in as</div>
+        <div class="sidebar-user-name" id="user-name">—</div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Navigation</div>
+        <button class="nav-item active" onclick="showPage('dashboard', this)">◈ &nbsp;Dashboard</button>
+        <button class="nav-item" onclick="showPage('transactions', this)">≡ &nbsp;Transactions</button>
+        <button class="nav-item" onclick="showPage('add', this)">+ &nbsp;Add Entry</button>
+      </div>
+      <div class="sidebar-footer">
+        <button class="nav-item logout-btn" onclick="logout()">← Sign Out</button>
+      </div>
+    </div>
+
+    <div class="main">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <div class="page-eyebrow">Overview</div>
+          <div class="page-title metal-text">Dashboard</div>
+          <div class="page-rule"></div>
+        </div>
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-label">Total Income</div>
+            <div class="summary-amount income" id="total-income">R 0.00</div>
+            <div class="summary-sub">All time earnings</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Total Expenses</div>
+            <div class="summary-amount expense" id="total-expense">R 0.00</div>
+            <div class="summary-sub">All time spending</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-label">Net Balance</div>
+            <div class="summary-amount balance" id="total-balance">R 0.00</div>
+            <div class="summary-sub">Current position</div>
+          </div>
+        </div>
+        <div class="section-header">
+          <div class="section-title">Recent Activity</div>
+        </div>
+        <div class="transactions-list" id="recent-list">
+          <div class="empty-state">No transactions recorded</div>
+        </div>
+      </div>
+
+      <!-- TRANSACTIONS -->
+      <div class="page" id="page-transactions">
+        <div class="page-header">
+          <div class="page-eyebrow">History</div>
+          <div class="page-title metal-text">Transactions</div>
+          <div class="page-rule"></div>
+        </div>
+        <div class="section-header">
+          <div class="section-title">All Entries</div>
+          <select class="filter-select" id="filter-type" onchange="renderTransactions()">
+            <option value="all">All</option>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+          </select>
+        </div>
+        <div class="transactions-list" id="all-list">
+          <div class="empty-state">No transactions recorded</div>
+        </div>
+      </div>
+
+      <!-- ADD -->
+      <div class="page" id="page-add">
+        <div class="page-header">
+          <div class="page-eyebrow">Record</div>
+          <div class="page-title metal-text">Add Entry</div>
+          <div class="page-rule"></div>
+        </div>
+        <div class="add-form">
+          <div class="form-row">
+            <div class="form-group" style="margin:0">
+              <label>Type</label>
+              <select id="tx-type">
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>Category</label>
+              <select id="tx-category">
+                <option>Salary</option>
+                <option>Freelance</option>
+                <option>Food</option>
+                <option>Transport</option>
+                <option>Housing</option>
+                <option>Entertainment</option>
+                <option>Healthcare</option>
+                <option>Education</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>Amount (R)</label>
+              <input type="number" id="tx-amount" placeholder="0.00" min="0" step="0.01"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group" style="margin:0">
+              <label>Description</label>
+              <input type="text" id="tx-desc" placeholder="e.g. Monthly salary"/>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label>Date</label>
+              <input type="date" id="tx-date"/>
+            </div>
+          </div>
+          <button class="add-btn" onclick="addTransaction()">Record Entry →</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const API = 'http://localhost:5000/api';
+  let token = localStorage.getItem('token');
+  let transactions = [];
+
+  document.getElementById('tx-date').valueAsDate = new Date();
+  if (token) showApp();
+
+  function switchTab(tab) {
+    document.querySelectorAll('.auth-tab').forEach((t, i) => {
+      t.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'register'));
+    });
+    document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
+    document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
+  }
+
+  async function login() {
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    if (!email || !password) return showError('login-error', 'Please fill in all fields');
+    try {
+      const res = await fetch(`${API}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (!res.ok) return showError('login-error', data.error);
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('userName', data.name);
+      token = data.token;
+      showApp();
+    } catch {
+      showError('login-error', 'Cannot connect to server');
+    }
+  }
+
+  async function register() {
+    const name = document.getElementById('reg-name').value;
+    const email = document.getElementById('reg-email').value;
+    const password = document.getElementById('reg-password').value;
+    if (!name || !email || !password) return showError('reg-error', 'Please fill in all fields');
+    try {
+      const res = await fetch(`${API}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+      });
+      const data = await res.json();
+      if (!res.ok) return showError('reg-error', data.error);
+      showToast('Account created', 'success');
+      switchTab('login');
+    } catch {
+      showError('reg-error', 'Cannot connect to server');
+    }
+  }
+
+  function showApp() {
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'block';
+    document.getElementById('user-name').textContent = localStorage.getItem('userName') || '—';
+    loadTransactions();
+  }
+
+  function logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userName');
+    token = null;
+    transactions = [];
+    document.getElementById('auth-screen').style.display = 'flex';
+    document.getElementById('app-screen').style.display = 'none';
+  }
+
+  async function loadTransactions() {
+    try {
+      const res = await fetch(`${API}/transactions`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      transactions = await res.json();
+      updateSummary();
+      renderRecentList();
+      renderTransactions();
+    } catch {
+      showToast('Failed to load data', 'error');
+    }
+  }
+
+  async function addTransaction() {
+    const type = document.getElementById('tx-type').value;
+    const category = document.getElementById('tx-category').value;
+    const amount = document.getElementById('tx-amount').value;
+    const description = document.getElementById('tx-desc').value;
+    const date = document.getElementById('tx-date').value;
+    if (!amount || !date) return showToast('Amount and date required', 'error');
+    try {
+      const res = await fetch(`${API}/transactions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ type, category, amount: parseFloat(amount), description, date })
+      });
+      if (!res.ok) throw new Error();
+      document.getElementById('tx-amount').value = '';
+      document.getElementById('tx-desc').value = '';
+      document.getElementById('tx-date').valueAsDate = new Date();
+      showToast('Entry recorded', 'success');
+      loadTransactions();
+    } catch {
+      showToast('Failed to add entry', 'error');
+    }
+  }
+
+  async function deleteTransaction(id) {
+    try {
+      await fetch(`${API}/transactions/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      showToast('Entry removed', 'success');
+      loadTransactions();
+    } catch {
+      showToast('Failed to delete', 'error');
+    }
+  }
+
+  function updateSummary() {
+    const income = transactions.filter(t => t.type === 'income').reduce((s, t) => s + parseFloat(t.amount), 0);
+    const expense = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + parseFloat(t.amount), 0);
+    const balance = income - expense;
+    document.getElementById('total-income').textContent = `R ${income.toFixed(2)}`;
+    document.getElementById('total-expense').textContent = `R ${expense.toFixed(2)}`;
+    const balEl = document.getElementById('total-balance');
+    balEl.textContent = `R ${balance.toFixed(2)}`;
+    balEl.className = `summary-amount ${balance >= 0 ? 'income' : 'expense'}`;
+  }
+
+  function renderRecentList() {
+    const list = document.getElementById('recent-list');
+    const recent = transactions.slice(0, 5);
+    list.innerHTML = recent.length ? recent.map(txHTML).join('') : '<div class="empty-state">No transactions recorded</div>';
+  }
+
+  function renderTransactions() {
+    const filter = document.getElementById('filter-type')?.value || 'all';
+    const filtered = filter === 'all' ? transactions : transactions.filter(t => t.type === filter);
+    const list = document.getElementById('all-list');
+    list.innerHTML = filtered.length ? filtered.map(txHTML).join('') : '<div class="empty-state">No entries found</div>';
+  }
+
+  function txHTML(t) {
+    const date = new Date(t.date).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
+    const sign = t.type === 'income' ? '+' : '−';
+    return `
+      <div class="tx-item">
+        <div class="tx-left">
+          <div class="tx-marker ${t.type}"></div>
+          <div>
+            <div class="tx-desc">${t.description || t.category}</div>
+            <div class="tx-meta">${t.category} · ${date}</div>
+          </div>
+        </div>
+        <div class="tx-right">
+          <div class="tx-amount ${t.type}">${sign} R ${parseFloat(t.amount).toFixed(2)}</div>
+          <button class="tx-delete" onclick="deleteTransaction(${t.id})">Remove</button>
+        </div>
+      </div>`;
+  }
+
+  function showPage(name, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById(`page-${name}`).classList.add('active');
+    if (el) el.classList.add('active');
+    if (name === 'transactions') renderTransactions();
+  }
+
+  function showError(id, msg) { document.getElementById(id).textContent = msg; }
+
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+</script>
+</body>
+</html>
