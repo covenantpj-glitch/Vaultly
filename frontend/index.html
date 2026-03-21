@@ -208,6 +208,7 @@
 
     .layout { display: flex; min-height: 100vh; }
 
+    /* SIDEBAR — desktop only */
     .sidebar {
       width: 220px;
       background: var(--black2);
@@ -217,6 +218,7 @@
       flex-direction: column;
       position: fixed;
       top: 0; left: 0; bottom: 0;
+      z-index: 100;
     }
 
     .sidebar-logo {
@@ -545,7 +547,7 @@
 
     .toast {
       position: fixed;
-      bottom: 2rem; right: 2rem;
+      bottom: 5rem; right: 1rem;
       padding: 1rem 1.5rem;
       border-left: 2px solid var(--metal);
       background: var(--black2);
@@ -563,11 +565,106 @@
     .toast.success { border-left-color: var(--green-text); color: var(--green-text); }
     .toast.error { border-left-color: var(--red-text); color: var(--red-text); }
 
+    /* MOBILE BOTTOM NAV */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--black2);
+      border-top: 1px solid var(--border);
+      z-index: 200;
+      padding: 0;
+    }
+
+    .mobile-nav-inner {
+      display: flex;
+      align-items: stretch;
+    }
+
+    .mobile-nav-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      padding: 0.8rem 0.5rem;
+      background: none;
+      border: none;
+      border-top: 2px solid transparent;
+      color: var(--metal-dark);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.55rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .mobile-nav-btn.active {
+      color: var(--white);
+      border-top-color: var(--gold);
+    }
+
+    .mobile-nav-btn:hover { color: var(--white2); }
+
+    .mobile-nav-icon {
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .mobile-nav-btn.logout-mobile {
+      color: var(--metal-dark);
+    }
+
+    .mobile-nav-btn.logout-mobile:hover { color: var(--red-text); }
+
+    /* MOBILE TOP BAR */
+    .mobile-topbar {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: var(--black2);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      z-index: 200;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mobile-topbar-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 1.2rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .mobile-topbar-user {
+      font-size: 0.65rem;
+      letter-spacing: 1px;
+      color: var(--metal-dark);
+      text-transform: uppercase;
+    }
+
+    /* RESPONSIVE */
     @media (max-width: 768px) {
       .sidebar { display: none; }
-      .main { margin-left: 0; padding: 1.5rem; }
+      .mobile-nav { display: flex; }
+      .mobile-topbar { display: flex; }
+      .main {
+        margin-left: 0;
+        padding: 1.5rem;
+        padding-top: 5rem;
+        padding-bottom: 6rem;
+      }
       .summary-grid { grid-template-columns: 1fr; }
       .form-row { grid-template-columns: 1fr; }
+      .toast { bottom: 5.5rem; }
+      .summary-card { padding: 1.2rem; }
+      .summary-amount { font-size: 1.8rem; }
+      .page-title { font-size: 2rem; }
     }
   </style>
 </head>
@@ -619,7 +716,15 @@
 
 <!-- APP -->
 <div id="app-screen">
+
+  <!-- MOBILE TOP BAR -->
+  <div class="mobile-topbar">
+    <div class="mobile-topbar-logo metal-text">Vaultly</div>
+    <div class="mobile-topbar-user" id="mobile-user-name">—</div>
+  </div>
+
   <div class="layout">
+    <!-- DESKTOP SIDEBAR -->
     <div class="sidebar">
       <div class="sidebar-logo metal-text">VT</div>
       <div class="sidebar-accent"></div>
@@ -639,7 +744,6 @@
     </div>
 
     <div class="main">
-
       <!-- DASHBOARD -->
       <div class="page active" id="page-dashboard">
         <div class="page-header">
@@ -740,9 +844,31 @@
           <button class="add-btn" onclick="addTransaction()">Record Entry →</button>
         </div>
       </div>
-
     </div>
   </div>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <div class="mobile-nav">
+    <div class="mobile-nav-inner">
+      <button class="mobile-nav-btn active" id="mnav-dashboard" onclick="showPageMobile('dashboard')">
+        <span class="mobile-nav-icon">◈</span>
+        <span>Dashboard</span>
+      </button>
+      <button class="mobile-nav-btn" id="mnav-transactions" onclick="showPageMobile('transactions')">
+        <span class="mobile-nav-icon">≡</span>
+        <span>History</span>
+      </button>
+      <button class="mobile-nav-btn" id="mnav-add" onclick="showPageMobile('add')">
+        <span class="mobile-nav-icon">+</span>
+        <span>Add</span>
+      </button>
+      <button class="mobile-nav-btn logout-mobile" onclick="logout()">
+        <span class="mobile-nav-icon">←</span>
+        <span>Sign Out</span>
+      </button>
+    </div>
+  </div>
+
 </div>
 
 <div class="toast" id="toast"></div>
@@ -807,7 +933,9 @@
   function showApp() {
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('app-screen').style.display = 'block';
-    document.getElementById('user-name').textContent = localStorage.getItem('userName') || '—';
+    const name = localStorage.getItem('userName') || '—';
+    document.getElementById('user-name').textContent = name;
+    document.getElementById('mobile-user-name').textContent = name;
     loadTransactions();
   }
 
@@ -920,6 +1048,15 @@
     document.getElementById(`page-${name}`).classList.add('active');
     if (el) el.classList.add('active');
     if (name === 'transactions') renderTransactions();
+  }
+
+  function showPageMobile(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`page-${name}`).classList.add('active');
+    document.getElementById(`mnav-${name}`).classList.add('active');
+    if (name === 'transactions') renderTransactions();
+    window.scrollTo(0, 0);
   }
 
   function showError(id, msg) { document.getElementById(id).textContent = msg; }
