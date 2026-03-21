@@ -8,6 +8,7 @@ const authRoutes = require('./routes/auth');
 const transactionRoutes = require('./routes/transactions');
 
 const app = express();
+app.set('trust proxy', 1);
 
 // Security headers
 app.use(helmet());
