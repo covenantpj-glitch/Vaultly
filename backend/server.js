@@ -42,4 +42,5 @@ app.use('/api/transactions', transactionRoutes);
 app.get('/', (req, res) => res.json({ message: 'Vaultly API running ✅' }));
 
 const PORT = process.env.PORT || 5000;
+require('./cron');
 app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));

@@ -49,4 +49,49 @@ router.delete('/:id', auth, (req, res) => {
   );
 });
 
+// Get microspend setting
+router.get('/microspend', auth, (req, res) => {
+  db.query('SELECT * FROM microspend WHERE user_id = ?',
+    [req.user.id],
+    (err, results) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json(results[0] || null);
+    }
+  );
+});
+
+// Set microspend
+router.post('/microspend', auth, (req, res) => {
+  const { amount } = req.body;
+  db.query('SELECT * FROM microspend WHERE user_id = ?', [req.user.id], (err, results) => {
+    if (results.length > 0) {
+      db.query('UPDATE microspend SET amount = ?, active = 1 WHERE user_id = ?',
+        [amount, req.user.id],
+        (err) => {
+          if (err) return res.status(500).json({ error: err.message });
+          res.json({ message: 'Microspend updated' });
+        }
+      );
+    } else {
+      db.query('INSERT INTO microspend (user_id, amount) VALUES (?, ?)',
+        [req.user.id, amount],
+        (err) => {
+          if (err) return res.status(500).json({ error: err.message });
+          res.json({ message: 'Microspend set' });
+        }
+      );
+    }
+  });
+});
+
+// Disable microspend
+router.delete('/microspend', auth, (req, res) => {
+  db.query('UPDATE microspend SET active = 0 WHERE user_id = ?',
+    [req.user.id],
+    (err) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ message: 'Microspend disabled' });
+    }
+  );
+});
 module.exports = router;
