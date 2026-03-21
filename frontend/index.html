@@ -5,663 +5,184 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vaultly | Personal Finance</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --black: #0a0a0a;
-      --black2: #111111;
-      --black3: #1a1a1a;
-      --black4: #222222;
-      --border: #2a2a2a;
-      --border2: #333333;
-      --metal-light: #c8c8c8;
-      --metal: #a0a0a0;
-      --metal-dark: #707070;
-      --white: #f0f0f0;
-      --white2: #d8d8d8;
-      --green-text: #7ab87a;
-      --red-text: #b87a7a;
-      --gold: #c9a84c;
-      --gold2: #e8c97a;
+      --black: #0a0a0a; --black2: #111111; --black3: #1a1a1a; --black4: #222222;
+      --border: #2a2a2a; --border2: #333333; --metal-light: #c8c8c8; --metal: #a0a0a0;
+      --metal-dark: #707070; --white: #f0f0f0; --white2: #d8d8d8;
+      --green-text: #7ab87a; --red-text: #b87a7a; --gold: #c9a84c; --gold2: #e8c97a;
     }
-
     html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background: var(--black);
-      color: var(--white);
-      min-height: 100vh;
-    }
-
+    body { font-family: 'Montserrat', sans-serif; background: var(--black); color: var(--white); min-height: 100vh; }
     .metal-text {
       background: linear-gradient(135deg, #ffffff 0%, #c0c0c0 30%, #808080 60%, #c0c0c0 80%, #ffffff 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      color: transparent;
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
     }
-
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: var(--black2); }
     ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
 
     /* AUTH */
-    #auth-screen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    #auth-screen::before {
-      content: '';
-      position: absolute;
-      width: 600px; height: 600px;
-      border-radius: 50%;
-      border: 1px solid rgba(200,200,200,0.04);
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-    }
-
-    .auth-box {
-      background: var(--black2);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 3rem;
-      width: 100%;
-      max-width: 400px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .auth-box::before, .auth-box::after {
-      content: '';
-      position: absolute;
-      width: 16px; height: 16px;
-    }
-
-    .auth-box::before {
-      top: -1px; left: -1px;
-      border-top: 2px solid var(--metal);
-      border-left: 2px solid var(--metal);
-    }
-
-    .auth-box::after {
-      bottom: -1px; right: -1px;
-      border-bottom: 2px solid var(--metal);
-      border-right: 2px solid var(--metal);
-    }
-
-    .auth-logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 600;
-      font-size: 2rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 0.3rem;
-    }
-
-    .auth-divider {
-      width: 40px; height: 1px;
-      background: linear-gradient(90deg, var(--gold), transparent);
-      margin: 0.8rem 0 1.5rem;
-    }
-
-    .auth-sub {
-      color: var(--metal-dark);
-      font-size: 0.72rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 2.5rem;
-    }
-
-    .auth-tabs {
-      display: flex;
-      margin-bottom: 2rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .auth-tab {
-      flex: 1;
-      padding: 0.7rem;
-      border: none;
-      border-bottom: 2px solid transparent;
-      background: transparent;
-      color: var(--metal-dark);
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-bottom: -1px;
-    }
-
+    #auth-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; overflow: hidden; }
+    #auth-screen::before { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; border: 1px solid rgba(200,200,200,0.04); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+    .auth-box { background: var(--black2); border: 1px solid var(--border); border-radius: 4px; padding: 3rem; width: 100%; max-width: 400px; position: relative; z-index: 1; }
+    .auth-box::before, .auth-box::after { content: ''; position: absolute; width: 16px; height: 16px; }
+    .auth-box::before { top: -1px; left: -1px; border-top: 2px solid var(--metal); border-left: 2px solid var(--metal); }
+    .auth-box::after { bottom: -1px; right: -1px; border-bottom: 2px solid var(--metal); border-right: 2px solid var(--metal); }
+    .auth-logo { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 2rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.3rem; }
+    .auth-divider { width: 40px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin: 0.8rem 0 1.5rem; }
+    .auth-sub { color: var(--metal-dark); font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2.5rem; }
+    .auth-tabs { display: flex; margin-bottom: 2rem; border-bottom: 1px solid var(--border); }
+    .auth-tab { flex: 1; padding: 0.7rem; border: none; border-bottom: 2px solid transparent; background: transparent; color: var(--metal-dark); font-family: 'Montserrat', sans-serif; font-size: 0.72rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; margin-bottom: -1px; }
     .auth-tab.active { color: var(--white); border-bottom-color: var(--metal); }
-
     .form-group { margin-bottom: 1.2rem; }
-
-    label {
-      display: block;
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--metal-dark);
-      margin-bottom: 0.5rem;
-    }
-
-    input, select {
-      width: 100%;
-      background: var(--black3);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      padding: 0.75rem 1rem;
-      color: var(--white);
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 300;
-      outline: none;
-      transition: border-color 0.2s;
-      appearance: none;
-    }
-
+    label { display: block; font-size: 0.65rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--metal-dark); margin-bottom: 0.5rem; }
+    input, select { width: 100%; background: var(--black3); border: 1px solid var(--border); border-radius: 2px; padding: 0.75rem 1rem; color: var(--white); font-family: 'Montserrat', sans-serif; font-size: 0.85rem; font-weight: 300; outline: none; transition: border-color 0.2s; appearance: none; }
     input:focus, select:focus { border-color: var(--metal); }
     input::placeholder { color: var(--border2); }
-
-    .btn {
-      width: 100%;
-      background: linear-gradient(135deg, #d0d0d0, #ffffff, #d0d0d0);
-      color: var(--black);
-      border: none;
-      padding: 0.85rem;
-      border-radius: 2px;
-      font-weight: 700;
-      font-size: 0.72rem;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      cursor: pointer;
-      font-family: 'Montserrat', sans-serif;
-      transition: all 0.2s;
-      margin-top: 0.8rem;
-    }
-
+    .btn { width: 100%; background: linear-gradient(135deg, #d0d0d0, #ffffff, #d0d0d0); color: var(--black); border: none; padding: 0.85rem; border-radius: 2px; font-weight: 700; font-size: 0.72rem; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; font-family: 'Montserrat', sans-serif; transition: all 0.2s; margin-top: 0.8rem; }
     .btn:hover { background: linear-gradient(135deg, #ffffff, #e0e0e0, #ffffff); }
-
-    .error-msg {
-      color: var(--red-text);
-      font-size: 0.72rem;
-      letter-spacing: 1px;
-      margin-top: 0.8rem;
-      text-align: center;
-    }
+    .error-msg { color: var(--red-text); font-size: 0.72rem; letter-spacing: 1px; margin-top: 0.8rem; text-align: center; }
 
     /* APP */
     #app-screen { display: none; min-height: 100vh; }
-
     .layout { display: flex; min-height: 100vh; }
 
-    /* SIDEBAR — desktop only */
-    .sidebar {
-      width: 220px;
-      background: var(--black2);
-      border-right: 1px solid var(--border);
-      padding: 2rem 0;
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      top: 0; left: 0; bottom: 0;
-      z-index: 100;
-    }
-
-    .sidebar-logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 600;
-      font-size: 1.3rem;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      padding: 0 1.5rem 1.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .sidebar-accent {
-      width: 24px; height: 1px;
-      background: linear-gradient(90deg, var(--gold), transparent);
-      margin: 0.5rem 1.5rem 0;
-    }
-
-    .sidebar-user {
-      padding: 1.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .sidebar-user-label {
-      font-size: 0.6rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--metal-dark);
-      margin-bottom: 0.3rem;
-    }
-
-    .sidebar-user-name {
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--white);
-    }
-
-    .nav-section { padding: 1.5rem 0; flex: 1; }
-
-    .nav-section-label {
-      font-size: 0.58rem;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: var(--border2);
-      padding: 0 1.5rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      padding: 0.75rem 1.5rem;
-      color: var(--metal-dark);
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 1.5px;
-      cursor: pointer;
-      transition: all 0.15s;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: left;
-      font-family: 'Montserrat', sans-serif;
-      text-transform: uppercase;
-      position: relative;
-    }
-
-    .nav-item::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 2px;
-      background: linear-gradient(180deg, var(--gold), var(--gold2));
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-
+    /* SIDEBAR */
+    .sidebar { width: 220px; background: var(--black2); border-right: 1px solid var(--border); padding: 2rem 0; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; }
+    .sidebar-logo { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.3rem; letter-spacing: 3px; text-transform: uppercase; padding: 0 1.5rem 1.5rem; border-bottom: 1px solid var(--border); }
+    .sidebar-accent { width: 24px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin: 0.5rem 1.5rem 0; }
+    .sidebar-user { padding: 1.5rem; border-bottom: 1px solid var(--border); }
+    .sidebar-user-label { font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--metal-dark); margin-bottom: 0.3rem; }
+    .sidebar-user-name { font-size: 0.85rem; font-weight: 500; color: var(--white); }
+    .nav-section { padding: 1.5rem 0; flex: 1; overflow-y: auto; }
+    .nav-section-label { font-size: 0.58rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--border2); padding: 0 1.5rem; margin-bottom: 0.5rem; }
+    .nav-item { display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 1.5rem; color: var(--metal-dark); font-size: 0.75rem; font-weight: 500; letter-spacing: 1.5px; cursor: pointer; transition: all 0.15s; border: none; background: none; width: 100%; text-align: left; font-family: 'Montserrat', sans-serif; text-transform: uppercase; position: relative; }
+    .nav-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--gold), var(--gold2)); opacity: 0; transition: opacity 0.2s; }
     .nav-item:hover { color: var(--white2); }
     .nav-item.active { color: var(--white); }
     .nav-item.active::before { opacity: 1; }
-
-    .sidebar-footer {
-      padding: 1.5rem;
-      border-top: 1px solid var(--border);
-    }
-
-    .logout-btn {
-      color: var(--metal-dark) !important;
-      font-size: 0.68rem !important;
-      padding: 0.5rem 0 !important;
-      width: auto !important;
-      letter-spacing: 2px !important;
-    }
-
+    .sidebar-footer { padding: 1.5rem; border-top: 1px solid var(--border); }
+    .logout-btn { color: var(--metal-dark) !important; font-size: 0.68rem !important; padding: 0.5rem 0 !important; width: auto !important; letter-spacing: 2px !important; }
     .logout-btn:hover { color: var(--red-text) !important; }
 
+    /* MAIN */
     .main { margin-left: 220px; padding: 3rem; flex: 1; }
-
     .page { display: none; animation: fadeIn 0.3s ease; }
     .page.active { display: block; }
-
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
     .page-header { margin-bottom: 2.5rem; }
+    .page-eyebrow { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+    .page-title { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 2.5rem; letter-spacing: 1px; line-height: 1; }
+    .page-rule { width: 50px; height: 1px; background: linear-gradient(90deg, var(--metal), transparent); margin-top: 1rem; }
 
-    .page-eyebrow {
-      font-size: 0.6rem;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.5rem;
-    }
-
-    .page-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 600;
-      font-size: 2.5rem;
-      letter-spacing: 1px;
-      line-height: 1;
-    }
-
-    .page-rule {
-      width: 50px; height: 1px;
-      background: linear-gradient(90deg, var(--metal), transparent);
-      margin-top: 1rem;
-    }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      margin-bottom: 3rem;
-    }
-
-    .summary-card {
-      background: var(--black2);
-      padding: 2rem;
-    }
-
-    .summary-label {
-      font-size: 0.6rem;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: var(--metal-dark);
-      margin-bottom: 1rem;
-    }
-
-    .summary-amount {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2.2rem;
-      font-weight: 600;
-      letter-spacing: -1px;
-      line-height: 1;
-    }
-
+    /* SUMMARY CARDS */
+    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 3rem; }
+    .summary-card { background: var(--black2); padding: 2rem; }
+    .summary-label { font-size: 0.6rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--metal-dark); margin-bottom: 1rem; }
+    .summary-amount { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 600; letter-spacing: -1px; line-height: 1; }
     .summary-amount.income { color: var(--green-text); }
     .summary-amount.expense { color: var(--red-text); }
     .summary-amount.balance { color: var(--white); }
+    .summary-sub { font-size: 0.62rem; letter-spacing: 1px; color: var(--border2); margin-top: 0.5rem; }
 
-    .summary-sub {
-      font-size: 0.62rem;
-      letter-spacing: 1px;
-      color: var(--border2);
-      margin-top: 0.5rem;
-    }
+    /* SECTION HEADER */
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+    .section-title { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--metal); }
+    .filter-select { background: transparent; border: 1px solid var(--border); color: var(--metal-dark); font-family: 'Montserrat', sans-serif; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; padding: 0.4rem 0.8rem; outline: none; cursor: pointer; width: auto; }
 
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .section-title {
-      font-size: 0.65rem;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--metal);
-    }
-
-    .filter-select {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--metal-dark);
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.65rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      padding: 0.4rem 0.8rem;
-      outline: none;
-      cursor: pointer;
-      width: auto;
-    }
-
+    /* TRANSACTIONS */
     .transactions-list { display: flex; flex-direction: column; }
-
-    .tx-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.2rem 0;
-      border-bottom: 1px solid var(--border);
-      transition: padding-left 0.2s;
-    }
-
+    .tx-item { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 0; border-bottom: 1px solid var(--border); transition: padding-left 0.2s; }
     .tx-item:hover { padding-left: 0.5rem; }
     .tx-item:last-child { border-bottom: none; }
-
     .tx-left { display: flex; align-items: center; gap: 1.2rem; }
-
-    .tx-marker {
-      width: 2px;
-      height: 32px;
-      flex-shrink: 0;
-    }
-
+    .tx-marker { width: 2px; height: 32px; flex-shrink: 0; }
     .tx-marker.income { background: linear-gradient(180deg, var(--green-text), transparent); }
     .tx-marker.expense { background: linear-gradient(180deg, var(--red-text), transparent); }
-
-    .tx-desc {
-      font-size: 0.82rem;
-      font-weight: 500;
-      color: var(--white2);
-      letter-spacing: 0.5px;
-    }
-
-    .tx-meta {
-      font-size: 0.62rem;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--metal-dark);
-      margin-top: 0.2rem;
-    }
-
+    .tx-desc { font-size: 0.82rem; font-weight: 500; color: var(--white2); letter-spacing: 0.5px; }
+    .tx-meta { font-size: 0.62rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--metal-dark); margin-top: 0.2rem; }
     .tx-right { display: flex; align-items: center; gap: 2rem; }
-
-    .tx-amount {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.3rem;
-      font-weight: 600;
-    }
-
+    .tx-amount { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; }
     .tx-amount.income { color: var(--green-text); }
     .tx-amount.expense { color: var(--red-text); }
-
-    .tx-delete {
-      background: none;
-      border: none;
-      color: var(--border2);
-      cursor: pointer;
-      font-size: 0.62rem;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      font-family: 'Montserrat', sans-serif;
-      padding: 0.3rem;
-      transition: color 0.2s;
-    }
-
+    .tx-delete { background: none; border: none; color: var(--border2); cursor: pointer; font-size: 0.62rem; letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; padding: 0.3rem; transition: color 0.2s; }
     .tx-delete:hover { color: var(--red-text); }
+    .empty-state { padding: 4rem 0; text-align: center; font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--border2); }
 
-    .empty-state {
-      padding: 4rem 0;
-      text-align: center;
-      font-size: 0.68rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--border2);
-    }
+    /* ADD FORM */
+    .add-form { border: 1px solid var(--border); padding: 2.5rem; position: relative; margin-bottom: 2rem; }
+    .add-form::before, .add-form::after { content: ''; position: absolute; width: 12px; height: 12px; }
+    .add-form::before { top: -1px; right: -1px; border-top: 1px solid var(--metal-dark); border-right: 1px solid var(--metal-dark); }
+    .add-form::after { bottom: -1px; left: -1px; border-bottom: 1px solid var(--metal-dark); border-left: 1px solid var(--metal-dark); }
+    .add-form h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--white); }
+    .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1.2rem; margin-bottom: 1.2rem; }
+    .add-btn { background: transparent; border: 1px solid var(--metal-dark); color: var(--white); padding: 0.8rem 2.5rem; font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; margin-top: 0.5rem; }
+    .add-btn:hover { background: var(--white); color: var(--black); border-color: var(--white); }
+    .danger-btn { border-color: var(--red-text) !important; color: var(--red-text) !important; }
+    .danger-btn:hover { background: var(--red-text) !important; color: var(--white) !important; }
 
-    .add-form {
-      border: 1px solid var(--border);
-      padding: 2.5rem;
-      position: relative;
-    }
+    /* MONTH COMPARISON */
+    .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 2rem; }
+    .comparison-card { background: var(--black2); padding: 2rem; }
+    .comparison-month { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+    .comparison-row { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .comparison-row:last-child { border-bottom: none; }
+    .comparison-row-label { font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--metal-dark); }
+    .comparison-row-value { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; }
+    .change-badge { font-size: 0.6rem; letter-spacing: 1px; padding: 0.2rem 0.5rem; border-radius: 2px; margin-left: 0.5rem; }
+    .change-up { background: rgba(122,184,122,0.1); color: var(--green-text); }
+    .change-down { background: rgba(184,122,122,0.1); color: var(--red-text); }
+    .chart-container { background: var(--black2); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
 
-    .add-form::before, .add-form::after {
-      content: '';
-      position: absolute;
-      width: 12px; height: 12px;
-    }
+    /* RECURRING */
+    .recurring-item { display: flex; align-items: center; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+    .recurring-item:last-child { border-bottom: none; }
+    .recurring-info { display: flex; flex-direction: column; gap: 0.2rem; }
+    .recurring-name { font-size: 0.82rem; font-weight: 500; color: var(--white2); }
+    .recurring-meta { font-size: 0.62rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--metal-dark); }
+    .recurring-right { display: flex; align-items: center; gap: 1.5rem; }
+    .recurring-amount { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; }
 
-    .add-form::before {
-      top: -1px; right: -1px;
-      border-top: 1px solid var(--metal-dark);
-      border-right: 1px solid var(--metal-dark);
-    }
+    /* MICROSPEND */
+    .microspend-box { background: var(--black2); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; position: relative; }
+    .microspend-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); }
+    .microspend-status { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; }
+    .microspend-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border2); }
+    .microspend-dot.active { background: var(--green-text); box-shadow: 0 0 6px var(--green-text); }
+    .microspend-label { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--metal-dark); }
+    .microspend-amount { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 600; color: var(--white); margin-bottom: 0.3rem; }
+    .microspend-sub { font-size: 0.62rem; letter-spacing: 1px; color: var(--metal-dark); margin-bottom: 1.5rem; }
 
-    .add-form::after {
-      bottom: -1px; left: -1px;
-      border-bottom: 1px solid var(--metal-dark);
-      border-left: 1px solid var(--metal-dark);
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 1.2rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .add-btn {
-      background: transparent;
-      border: 1px solid var(--metal-dark);
-      color: var(--white);
-      padding: 0.8rem 2.5rem;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-top: 0.5rem;
-    }
-
-    .add-btn:hover {
-      background: var(--white);
-      color: var(--black);
-      border-color: var(--white);
-    }
-
-    .toast {
-      position: fixed;
-      bottom: 5rem; right: 1rem;
-      padding: 1rem 1.5rem;
-      border-left: 2px solid var(--metal);
-      background: var(--black2);
-      font-size: 0.68rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      font-weight: 500;
-      transform: translateX(120%);
-      opacity: 0;
-      transition: all 0.3s;
-      z-index: 1000;
-    }
-
+    /* TOAST */
+    .toast { position: fixed; bottom: 5rem; right: 1rem; padding: 1rem 1.5rem; border-left: 2px solid var(--metal); background: var(--black2); font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; transform: translateX(120%); opacity: 0; transition: all 0.3s; z-index: 1000; }
     .toast.show { transform: translateX(0); opacity: 1; }
     .toast.success { border-left-color: var(--green-text); color: var(--green-text); }
     .toast.error { border-left-color: var(--red-text); color: var(--red-text); }
 
-    /* MOBILE BOTTOM NAV */
-    .mobile-nav {
-      display: none;
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: var(--black2);
-      border-top: 1px solid var(--border);
-      z-index: 200;
-      padding: 0;
-    }
-
-    .mobile-nav-inner {
-      display: flex;
-      align-items: stretch;
-    }
-
-    .mobile-nav-btn {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.3rem;
-      padding: 0.8rem 0.5rem;
-      background: none;
-      border: none;
-      border-top: 2px solid transparent;
-      color: var(--metal-dark);
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.55rem;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .mobile-nav-btn.active {
-      color: var(--white);
-      border-top-color: var(--gold);
-    }
-
+    /* MOBILE */
+    .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--black2); border-top: 1px solid var(--border); z-index: 200; }
+    .mobile-nav-inner { display: flex; align-items: stretch; }
+    .mobile-nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.3rem; padding: 0.8rem 0.3rem; background: none; border: none; border-top: 2px solid transparent; color: var(--metal-dark); font-family: 'Montserrat', sans-serif; font-size: 0.5rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.15s; }
+    .mobile-nav-btn.active { color: var(--white); border-top-color: var(--gold); }
     .mobile-nav-btn:hover { color: var(--white2); }
-
-    .mobile-nav-icon {
-      font-size: 1.1rem;
-      line-height: 1;
-    }
-
-    .mobile-nav-btn.logout-mobile {
-      color: var(--metal-dark);
-    }
-
+    .mobile-nav-icon { font-size: 1rem; line-height: 1; }
+    .mobile-nav-btn.logout-mobile { color: var(--metal-dark); }
     .mobile-nav-btn.logout-mobile:hover { color: var(--red-text); }
+    .mobile-topbar { display: none; position: fixed; top: 0; left: 0; right: 0; background: var(--black2); border-bottom: 1px solid var(--border); padding: 1rem 1.5rem; z-index: 200; align-items: center; justify-content: space-between; }
+    .mobile-topbar-logo { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.2rem; letter-spacing: 3px; text-transform: uppercase; }
+    .mobile-topbar-user { font-size: 0.65rem; letter-spacing: 1px; color: var(--metal-dark); text-transform: uppercase; }
 
-    /* MOBILE TOP BAR */
-    .mobile-topbar {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      background: var(--black2);
-      border-bottom: 1px solid var(--border);
-      padding: 1rem 1.5rem;
-      z-index: 200;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .mobile-topbar-logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 600;
-      font-size: 1.2rem;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-    }
-
-    .mobile-topbar-user {
-      font-size: 0.65rem;
-      letter-spacing: 1px;
-      color: var(--metal-dark);
-      text-transform: uppercase;
-    }
-
-    /* RESPONSIVE */
     @media (max-width: 768px) {
       .sidebar { display: none; }
       .mobile-nav { display: flex; }
       .mobile-topbar { display: flex; }
-      .main {
-        margin-left: 0;
-        padding: 1.5rem;
-        padding-top: 5rem;
-        padding-bottom: 6rem;
-      }
+      .main { margin-left: 0; padding: 1.5rem; padding-top: 5rem; padding-bottom: 6rem; }
       .summary-grid { grid-template-columns: 1fr; }
+      .comparison-grid { grid-template-columns: 1fr; }
       .form-row { grid-template-columns: 1fr; }
-      .toast { bottom: 5.5rem; }
       .summary-card { padding: 1.2rem; }
       .summary-amount { font-size: 1.8rem; }
       .page-title { font-size: 2rem; }
@@ -676,51 +197,27 @@
     <div class="auth-logo metal-text">Vaultly</div>
     <div class="auth-divider"></div>
     <div class="auth-sub">Personal Finance Tracker</div>
-
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
       <button class="auth-tab" onclick="switchTab('register')">Register</button>
     </div>
-
-<div id="login-form">
-      <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" id="login-email" placeholder="your@email.com"/>
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="login-password" placeholder="••••••••"/>
-      </div>
+    <div id="login-form">
+      <div class="form-group"><label>Email Address</label><input type="email" id="login-email" placeholder="your@email.com"/></div>
+      <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="••••••••"/></div>
       <button class="btn" onclick="login()">Enter →</button>
       <div class="error-msg" id="login-error"></div>
     </div>
-
     <div id="otp-form" style="display:none">
-      <p style="color:var(--metal-dark);font-size:0.75rem;letter-spacing:1px;margin-bottom:1.5rem;">
-        A 6-digit code was sent to your email. Enter it below.
-      </p>
-      <div class="form-group">
-        <label>Verification Code</label>
-        <input type="text" id="otp-input" placeholder="000000" maxlength="6" style="letter-spacing:8px;font-size:1.2rem;text-align:center;"/>
-      </div>
+      <p style="color:var(--metal-dark);font-size:0.75rem;letter-spacing:1px;margin-bottom:1.5rem;">A 6-digit code was sent to your email.</p>
+      <div class="form-group"><label>Verification Code</label><input type="text" id="otp-input" placeholder="000000" maxlength="6" style="letter-spacing:8px;font-size:1.2rem;text-align:center;"/></div>
       <button class="btn" onclick="verifyOTP()">Verify →</button>
       <div class="error-msg" id="otp-error"></div>
-      <p style="color:var(--metal-dark);font-size:0.7rem;letter-spacing:1px;margin-top:1rem;text-align:center;cursor:pointer;" onclick="backToLogin()">← Back to login</p>
+      <p style="color:var(--metal-dark);font-size:0.7rem;letter-spacing:1px;margin-top:1rem;text-align:center;cursor:pointer;" onclick="backToLogin()">← Back</p>
     </div>
-
     <div id="register-form" style="display:none">
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" id="reg-name" placeholder="John Smith"/>
-      </div>
-      <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" id="reg-email" placeholder="your@email.com"/>
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="reg-password" placeholder="••••••••"/>
-      </div>
+      <div class="form-group"><label>Full Name</label><input type="text" id="reg-name" placeholder="John Smith"/></div>
+      <div class="form-group"><label>Email Address</label><input type="email" id="reg-email" placeholder="your@email.com"/></div>
+      <div class="form-group"><label>Password</label><input type="password" id="reg-password" placeholder="••••••••"/></div>
       <button class="btn" onclick="register()">Create Account →</button>
       <div class="error-msg" id="reg-error"></div>
     </div>
@@ -729,15 +226,12 @@
 
 <!-- APP -->
 <div id="app-screen">
-
-  <!-- MOBILE TOP BAR -->
   <div class="mobile-topbar">
     <div class="mobile-topbar-logo metal-text">Vaultly</div>
     <div class="mobile-topbar-user" id="mobile-user-name">—</div>
   </div>
 
   <div class="layout">
-    <!-- DESKTOP SIDEBAR -->
     <div class="sidebar">
       <div class="sidebar-logo metal-text">VT</div>
       <div class="sidebar-accent"></div>
@@ -746,10 +240,14 @@
         <div class="sidebar-user-name" id="user-name">—</div>
       </div>
       <div class="nav-section">
-        <div class="nav-section-label">Navigation</div>
+        <div class="nav-section-label">Main</div>
         <button class="nav-item active" onclick="showPage('dashboard', this)">◈ &nbsp;Dashboard</button>
         <button class="nav-item" onclick="showPage('transactions', this)">≡ &nbsp;Transactions</button>
         <button class="nav-item" onclick="showPage('add', this)">+ &nbsp;Add Entry</button>
+        <div class="nav-section-label" style="margin-top:1rem;">Tools</div>
+        <button class="nav-item" onclick="showPage('compare', this)">⇌ &nbsp;Compare</button>
+        <button class="nav-item" onclick="showPage('recurring', this)">↻ &nbsp;Recurring</button>
+        <button class="nav-item" onclick="showPage('microspend', this)">◎ &nbsp;Microspend</button>
       </div>
       <div class="sidebar-footer">
         <button class="nav-item logout-btn" onclick="logout()">← Sign Out</button>
@@ -757,6 +255,7 @@
     </div>
 
     <div class="main">
+
       <!-- DASHBOARD -->
       <div class="page active" id="page-dashboard">
         <div class="page-header">
@@ -781,12 +280,8 @@
             <div class="summary-sub">Current position</div>
           </div>
         </div>
-        <div class="section-header">
-          <div class="section-title">Recent Activity</div>
-        </div>
-        <div class="transactions-list" id="recent-list">
-          <div class="empty-state">No transactions recorded</div>
-        </div>
+        <div class="section-header"><div class="section-title">Recent Activity</div></div>
+        <div class="transactions-list" id="recent-list"><div class="empty-state">No transactions recorded</div></div>
       </div>
 
       <!-- TRANSACTIONS -->
@@ -804,9 +299,7 @@
             <option value="expense">Expense</option>
           </select>
         </div>
-        <div class="transactions-list" id="all-list">
-          <div class="empty-state">No transactions recorded</div>
-        </div>
+        <div class="transactions-list" id="all-list"><div class="empty-state">No transactions recorded</div></div>
       </div>
 
       <!-- ADD -->
@@ -818,70 +311,106 @@
         </div>
         <div class="add-form">
           <div class="form-row">
-            <div class="form-group" style="margin:0">
-              <label>Type</label>
-              <select id="tx-type">
-                <option value="income">Income</option>
-                <option value="expense">Expense</option>
-              </select>
-            </div>
-            <div class="form-group" style="margin:0">
-              <label>Category</label>
-              <select id="tx-category">
-                <option>Salary</option>
-                <option>Freelance</option>
-                <option>Food</option>
-                <option>Transport</option>
-                <option>Housing</option>
-                <option>Entertainment</option>
-                <option>Healthcare</option>
-                <option>Education</option>
-                <option>Other</option>
-              </select>
-            </div>
-            <div class="form-group" style="margin:0">
-              <label>Amount (R)</label>
-              <input type="number" id="tx-amount" placeholder="0.00" min="0" step="0.01"/>
-            </div>
+            <div class="form-group" style="margin:0"><label>Type</label><select id="tx-type"><option value="income">Income</option><option value="expense">Expense</option></select></div>
+            <div class="form-group" style="margin:0"><label>Category</label><select id="tx-category"><option>Salary</option><option>Freelance</option><option>Food</option><option>Transport</option><option>Housing</option><option>Entertainment</option><option>Healthcare</option><option>Education</option><option>Savings</option><option>Other</option></select></div>
+            <div class="form-group" style="margin:0"><label>Amount (R)</label><input type="number" id="tx-amount" placeholder="0.00" min="0" step="0.01"/></div>
           </div>
           <div class="form-row">
-            <div class="form-group" style="margin:0">
-              <label>Description</label>
-              <input type="text" id="tx-desc" placeholder="e.g. Monthly salary"/>
-            </div>
-            <div class="form-group" style="margin:0">
-              <label>Date</label>
-              <input type="date" id="tx-date"/>
-            </div>
+            <div class="form-group" style="margin:0"><label>Description</label><input type="text" id="tx-desc" placeholder="e.g. Monthly salary"/></div>
+            <div class="form-group" style="margin:0"><label>Date</label><input type="date" id="tx-date"/></div>
           </div>
           <button class="add-btn" onclick="addTransaction()">Record Entry →</button>
         </div>
       </div>
+
+      <!-- COMPARE -->
+      <div class="page" id="page-compare">
+        <div class="page-header">
+          <div class="page-eyebrow">Analysis</div>
+          <div class="page-title metal-text">Compare</div>
+          <div class="page-rule"></div>
+        </div>
+        <div class="comparison-grid" id="comparison-grid">
+          <div class="comparison-card"><div class="empty-state">Loading...</div></div>
+          <div class="comparison-card"><div class="empty-state">Loading...</div></div>
+        </div>
+        <div class="chart-container">
+          <div class="section-header" style="margin-bottom:1.5rem;"><div class="section-title">6 Month Overview</div></div>
+          <canvas id="monthChart" height="120"></canvas>
+        </div>
+      </div>
+
+      <!-- RECURRING -->
+      <div class="page" id="page-recurring">
+        <div class="page-header">
+          <div class="page-eyebrow">Automation</div>
+          <div class="page-title metal-text">Recurring</div>
+          <div class="page-rule"></div>
+        </div>
+        <div class="add-form">
+          <h3>Add Recurring Transaction</h3>
+          <div class="form-row">
+            <div class="form-group" style="margin:0"><label>Type</label><select id="rec-type"><option value="income">Income</option><option value="expense">Expense</option></select></div>
+            <div class="form-group" style="margin:0"><label>Category</label><select id="rec-category"><option>Salary</option><option>Freelance</option><option>Food</option><option>Transport</option><option>Housing</option><option>Entertainment</option><option>Healthcare</option><option>Education</option><option>Savings</option><option>Other</option></select></div>
+            <div class="form-group" style="margin:0"><label>Amount (R)</label><input type="number" id="rec-amount" placeholder="0.00"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group" style="margin:0"><label>Description</label><input type="text" id="rec-desc" placeholder="e.g. Netflix subscription"/></div>
+            <div class="form-group" style="margin:0"><label>Day of Month</label><input type="number" id="rec-day" placeholder="1-28" min="1" max="28"/></div>
+          </div>
+          <button class="add-btn" onclick="addRecurring()">Add Recurring →</button>
+        </div>
+        <div class="section-header"><div class="section-title">Active Recurring</div></div>
+        <div id="recurring-list"><div class="empty-state">No recurring transactions set up</div></div>
+      </div>
+
+      <!-- MICROSPEND -->
+      <div class="page" id="page-microspend">
+        <div class="page-header">
+          <div class="page-eyebrow">Smart Tracking</div>
+          <div class="page-title metal-text">Microspend</div>
+          <div class="page-rule"></div>
+        </div>
+        <div class="microspend-box">
+          <div class="microspend-status">
+            <div class="microspend-dot" id="microspend-dot"></div>
+            <div class="microspend-label" id="microspend-status-label">Not configured</div>
+          </div>
+          <div class="microspend-amount" id="microspend-current-amount">R 0.00</div>
+          <div class="microspend-sub">Auto-logged every Monday as an expense</div>
+          <p style="font-size:0.72rem;color:var(--metal-dark);line-height:1.6;margin-bottom:1.5rem;">Microspend automatically records a weekly cash allowance every Monday — covering small daily purchases like food, transport, and miscellaneous spending that you don't want to log individually.</p>
+          <div class="form-row" style="max-width:400px;">
+            <div class="form-group" style="margin:0"><label>Weekly Amount (R)</label><input type="number" id="microspend-amount" placeholder="e.g. 200"/></div>
+          </div>
+          <div style="display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap;">
+            <button class="add-btn" onclick="saveMicrospend()">Save →</button>
+            <button class="add-btn danger-btn" onclick="disableMicrospend()">Disable</button>
+          </div>
+        </div>
+        <div style="background:var(--black2);border:1px solid var(--border);padding:1.5rem;">
+          <div class="section-title" style="margin-bottom:1rem;">How it works</div>
+          <div style="display:flex;flex-direction:column;gap:0.8rem;">
+            <div style="display:flex;gap:1rem;align-items:flex-start;"><div style="color:var(--gold);font-size:0.8rem;flex-shrink:0;">01</div><div style="font-size:0.78rem;color:var(--metal-dark);line-height:1.5;">Set your weekly cash allowance — how much you typically spend on small daily purchases</div></div>
+            <div style="display:flex;gap:1rem;align-items:flex-start;"><div style="color:var(--gold);font-size:0.8rem;flex-shrink:0;">02</div><div style="font-size:0.78rem;color:var(--metal-dark);line-height:1.5;">Every Monday at midnight, Vaultly automatically logs this as a "Microspend" expense</div></div>
+            <div style="display:flex;gap:1rem;align-items:flex-start;"><div style="color:var(--gold);font-size:0.8rem;flex-shrink:0;">03</div><div style="font-size:0.78rem;color:var(--metal-dark);line-height:1.5;">No need to log every coffee, taxi, or tuck shop visit — it's all accounted for automatically</div></div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
   <!-- MOBILE BOTTOM NAV -->
   <div class="mobile-nav">
     <div class="mobile-nav-inner">
-      <button class="mobile-nav-btn active" id="mnav-dashboard" onclick="showPageMobile('dashboard')">
-        <span class="mobile-nav-icon">◈</span>
-        <span>Dashboard</span>
-      </button>
-      <button class="mobile-nav-btn" id="mnav-transactions" onclick="showPageMobile('transactions')">
-        <span class="mobile-nav-icon">≡</span>
-        <span>History</span>
-      </button>
-      <button class="mobile-nav-btn" id="mnav-add" onclick="showPageMobile('add')">
-        <span class="mobile-nav-icon">+</span>
-        <span>Add</span>
-      </button>
-      <button class="mobile-nav-btn logout-mobile" onclick="logout()">
-        <span class="mobile-nav-icon">←</span>
-        <span>Sign Out</span>
-      </button>
+      <button class="mobile-nav-btn active" id="mnav-dashboard" onclick="showPageMobile('dashboard')"><span class="mobile-nav-icon">◈</span><span>Home</span></button>
+      <button class="mobile-nav-btn" id="mnav-transactions" onclick="showPageMobile('transactions')"><span class="mobile-nav-icon">≡</span><span>History</span></button>
+      <button class="mobile-nav-btn" id="mnav-add" onclick="showPageMobile('add')"><span class="mobile-nav-icon">+</span><span>Add</span></button>
+      <button class="mobile-nav-btn" id="mnav-compare" onclick="showPageMobile('compare')"><span class="mobile-nav-icon">⇌</span><span>Compare</span></button>
+      <button class="mobile-nav-btn" id="mnav-recurring" onclick="showPageMobile('recurring')"><span class="mobile-nav-icon">↻</span><span>Auto</span></button>
+      <button class="mobile-nav-btn logout-mobile" onclick="logout()"><span class="mobile-nav-icon">←</span><span>Out</span></button>
     </div>
   </div>
-
 </div>
 
 <div class="toast" id="toast"></div>
@@ -890,6 +419,8 @@
   const API = 'https://vaultly-production.up.railway.app/api';
   let token = localStorage.getItem('token');
   let transactions = [];
+  let pendingEmail = '';
+  let monthChart = null;
 
   document.getElementById('tx-date').valueAsDate = new Date();
   if (token) showApp();
@@ -900,20 +431,15 @@
     });
     document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
     document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
+    document.getElementById('otp-form').style.display = 'none';
   }
-
-let pendingEmail = '';
 
   async function login() {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
     if (!email || !password) return showError('login-error', 'Please fill in all fields');
     try {
-      const res = await fetch(`${API}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
+      const res = await fetch(`${API}/auth/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
       const data = await res.json();
       if (!res.ok) return showError('login-error', data.error);
       if (data.requiresOTP) {
@@ -921,29 +447,21 @@ let pendingEmail = '';
         document.getElementById('login-form').style.display = 'none';
         document.getElementById('otp-form').style.display = 'block';
       }
-    } catch {
-      showError('login-error', 'Cannot connect to server');
-    }
+    } catch { showError('login-error', 'Cannot connect to server'); }
   }
 
   async function verifyOTP() {
     const otp = document.getElementById('otp-input').value;
     if (!otp || otp.length !== 6) return showError('otp-error', 'Enter the 6-digit code');
     try {
-      const res = await fetch(`${API}/auth/verify-otp`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: pendingEmail, otp })
-      });
+      const res = await fetch(`${API}/auth/verify-otp`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: pendingEmail, otp }) });
       const data = await res.json();
       if (!res.ok) return showError('otp-error', data.error);
       localStorage.setItem('token', data.token);
       localStorage.setItem('userName', data.name);
       token = data.token;
       showApp();
-    } catch {
-      showError('otp-error', 'Cannot connect to server');
-    }
+    } catch { showError('otp-error', 'Cannot connect to server'); }
   }
 
   function backToLogin() {
@@ -958,18 +476,12 @@ let pendingEmail = '';
     const password = document.getElementById('reg-password').value;
     if (!name || !email || !password) return showError('reg-error', 'Please fill in all fields');
     try {
-      const res = await fetch(`${API}/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
-      });
+      const res = await fetch(`${API}/auth/register`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, password }) });
       const data = await res.json();
       if (!res.ok) return showError('reg-error', data.error);
       showToast('Account created', 'success');
       switchTab('login');
-    } catch {
-      showError('reg-error', 'Cannot connect to server');
-    }
+    } catch { showError('reg-error', 'Cannot connect to server'); }
   }
 
   function showApp() {
@@ -979,6 +491,7 @@ let pendingEmail = '';
     document.getElementById('user-name').textContent = name;
     document.getElementById('mobile-user-name').textContent = name;
     loadTransactions();
+    loadMicrospend();
   }
 
   function logout() {
@@ -992,16 +505,12 @@ let pendingEmail = '';
 
   async function loadTransactions() {
     try {
-      const res = await fetch(`${API}/transactions`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      const res = await fetch(`${API}/transactions`, { headers: { 'Authorization': `Bearer ${token}` } });
       transactions = await res.json();
       updateSummary();
       renderRecentList();
       renderTransactions();
-    } catch {
-      showToast('Failed to load data', 'error');
-    }
+    } catch { showToast('Failed to load data', 'error'); }
   }
 
   async function addTransaction() {
@@ -1012,33 +521,22 @@ let pendingEmail = '';
     const date = document.getElementById('tx-date').value;
     if (!amount || !date) return showToast('Amount and date required', 'error');
     try {
-      const res = await fetch(`${API}/transactions`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ type, category, amount: parseFloat(amount), description, date })
-      });
+      const res = await fetch(`${API}/transactions`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ type, category, amount: parseFloat(amount), description, date }) });
       if (!res.ok) throw new Error();
       document.getElementById('tx-amount').value = '';
       document.getElementById('tx-desc').value = '';
       document.getElementById('tx-date').valueAsDate = new Date();
       showToast('Entry recorded', 'success');
       loadTransactions();
-    } catch {
-      showToast('Failed to add entry', 'error');
-    }
+    } catch { showToast('Failed to add entry', 'error'); }
   }
 
   async function deleteTransaction(id) {
     try {
-      await fetch(`${API}/transactions/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      await fetch(`${API}/transactions/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
       showToast('Entry removed', 'success');
       loadTransactions();
-    } catch {
-      showToast('Failed to delete', 'error');
-    }
+    } catch { showToast('Failed to delete', 'error'); }
   }
 
   function updateSummary() {
@@ -1068,20 +566,157 @@ let pendingEmail = '';
   function txHTML(t) {
     const date = new Date(t.date).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
     const sign = t.type === 'income' ? '+' : '−';
-    return `
-      <div class="tx-item">
-        <div class="tx-left">
-          <div class="tx-marker ${t.type}"></div>
-          <div>
-            <div class="tx-desc">${t.description || t.category}</div>
-            <div class="tx-meta">${t.category} · ${date}</div>
+    return `<div class="tx-item"><div class="tx-left"><div class="tx-marker ${t.type}"></div><div><div class="tx-desc">${t.description || t.category}</div><div class="tx-meta">${t.category} · ${date}</div></div></div><div class="tx-right"><div class="tx-amount ${t.type}">${sign} R ${parseFloat(t.amount).toFixed(2)}</div><button class="tx-delete" onclick="deleteTransaction(${t.id})">Remove</button></div></div>`;
+  }
+
+  async function loadComparison() {
+    try {
+      const res = await fetch(`${API}/transactions/monthly-summary`, { headers: { 'Authorization': `Bearer ${token}` } });
+      const data = await res.json();
+      const months = {};
+      data.forEach(row => {
+        if (!months[row.month]) months[row.month] = { income: 0, expense: 0 };
+        months[row.month][row.type] = parseFloat(row.total);
+      });
+      const keys = Object.keys(months).sort().reverse();
+      const thisMonth = months[keys[0]] || { income: 0, expense: 0 };
+      const lastMonth = months[keys[1]] || { income: 0, expense: 0 };
+      const thisBalance = thisMonth.income - thisMonth.expense;
+      const lastBalance = lastMonth.income - lastMonth.expense;
+      function formatMonth(key) {
+        if (!key) return 'N/A';
+        const [y, m] = key.split('-');
+        return new Date(y, m - 1).toLocaleString('default', { month: 'long', year: 'numeric' });
+      }
+      function changeBadge(curr, prev) {
+        if (!prev) return '';
+        const pct = prev === 0 ? 100 : (((curr - prev) / prev) * 100).toFixed(0);
+        const cls = curr >= prev ? 'change-up' : 'change-down';
+        const arrow = curr >= prev ? '↑' : '↓';
+        return `<span class="change-badge ${cls}">${arrow} ${Math.abs(pct)}%</span>`;
+      }
+      document.getElementById('comparison-grid').innerHTML = `
+        <div class="comparison-card">
+          <div class="comparison-month">${formatMonth(keys[0])} — This Month</div>
+          <div class="comparison-row"><div class="comparison-row-label">Income</div><div class="comparison-row-value" style="color:var(--green-text)">R ${thisMonth.income.toFixed(2)} ${changeBadge(thisMonth.income, lastMonth.income)}</div></div>
+          <div class="comparison-row"><div class="comparison-row-label">Expenses</div><div class="comparison-row-value" style="color:var(--red-text)">R ${thisMonth.expense.toFixed(2)} ${changeBadge(thisMonth.expense, lastMonth.expense)}</div></div>
+          <div class="comparison-row"><div class="comparison-row-label">Balance</div><div class="comparison-row-value" style="color:var(--white)">R ${thisBalance.toFixed(2)}</div></div>
+        </div>
+        <div class="comparison-card">
+          <div class="comparison-month">${formatMonth(keys[1])} — Last Month</div>
+          <div class="comparison-row"><div class="comparison-row-label">Income</div><div class="comparison-row-value" style="color:var(--green-text)">R ${lastMonth.income.toFixed(2)}</div></div>
+          <div class="comparison-row"><div class="comparison-row-label">Expenses</div><div class="comparison-row-value" style="color:var(--red-text)">R ${lastMonth.expense.toFixed(2)}</div></div>
+          <div class="comparison-row"><div class="comparison-row-label">Balance</div><div class="comparison-row-value" style="color:var(--white)">R ${lastBalance.toFixed(2)}</div></div>
+        </div>`;
+      const labels = keys.slice(0, 6).reverse().map(k => formatMonth(k).split(' ')[0]);
+      const incomeData = keys.slice(0, 6).reverse().map(k => (months[k]?.income || 0));
+      const expenseData = keys.slice(0, 6).reverse().map(k => (months[k]?.expense || 0));
+      if (monthChart) monthChart.destroy();
+      const ctx = document.getElementById('monthChart').getContext('2d');
+      monthChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            { label: 'Income', data: incomeData, backgroundColor: 'rgba(122,184,122,0.4)', borderColor: 'rgba(122,184,122,0.8)', borderWidth: 1 },
+            { label: 'Expenses', data: expenseData, backgroundColor: 'rgba(184,122,122,0.4)', borderColor: 'rgba(184,122,122,0.8)', borderWidth: 1 }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { labels: { color: '#a0a0a0', font: { family: 'Montserrat', size: 10 } } } },
+          scales: {
+            x: { ticks: { color: '#707070', font: { family: 'Montserrat', size: 10 } }, grid: { color: '#2a2a2a' } },
+            y: { ticks: { color: '#707070', font: { family: 'Montserrat', size: 10 }, callback: v => 'R' + v }, grid: { color: '#2a2a2a' } }
+          }
+        }
+      });
+    } catch(e) { console.error(e); }
+  }
+
+  async function loadRecurring() {
+    try {
+      const res = await fetch(`${API}/transactions/recurring`, { headers: { 'Authorization': `Bearer ${token}` } });
+      const data = await res.json();
+      const list = document.getElementById('recurring-list');
+      if (!data.length) { list.innerHTML = '<div class="empty-state">No recurring transactions set up</div>'; return; }
+      list.innerHTML = data.map(r => `
+        <div class="recurring-item">
+          <div class="recurring-info">
+            <div class="recurring-name">${r.description || r.category}</div>
+            <div class="recurring-meta">${r.category} · Day ${r.day_of_month} of each month · ${r.type}</div>
           </div>
-        </div>
-        <div class="tx-right">
-          <div class="tx-amount ${t.type}">${sign} R ${parseFloat(t.amount).toFixed(2)}</div>
-          <button class="tx-delete" onclick="deleteTransaction(${t.id})">Remove</button>
-        </div>
-      </div>`;
+          <div class="recurring-right">
+            <div class="recurring-amount" style="color:${r.type === 'income' ? 'var(--green-text)' : 'var(--red-text)'}">${r.type === 'income' ? '+' : '−'} R ${parseFloat(r.amount).toFixed(2)}</div>
+            <button class="tx-delete" onclick="deleteRecurring(${r.id})">Remove</button>
+          </div>
+        </div>`).join('');
+    } catch { showToast('Failed to load recurring', 'error'); }
+  }
+
+  async function addRecurring() {
+    const type = document.getElementById('rec-type').value;
+    const category = document.getElementById('rec-category').value;
+    const amount = document.getElementById('rec-amount').value;
+    const description = document.getElementById('rec-desc').value;
+    const day = document.getElementById('rec-day').value;
+    if (!amount || !day) return showToast('Amount and day required', 'error');
+    try {
+      const res = await fetch(`${API}/transactions/recurring`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ type, category, amount: parseFloat(amount), description, day_of_month: parseInt(day) }) });
+      if (!res.ok) throw new Error();
+      document.getElementById('rec-amount').value = '';
+      document.getElementById('rec-desc').value = '';
+      document.getElementById('rec-day').value = '';
+      showToast('Recurring added', 'success');
+      loadRecurring();
+    } catch { showToast('Failed to add recurring', 'error'); }
+  }
+
+  async function deleteRecurring(id) {
+    try {
+      await fetch(`${API}/transactions/recurring/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+      showToast('Removed', 'success');
+      loadRecurring();
+    } catch { showToast('Failed to delete', 'error'); }
+  }
+
+  async function loadMicrospend() {
+    try {
+      const res = await fetch(`${API}/transactions/microspend`, { headers: { 'Authorization': `Bearer ${token}` } });
+      const data = await res.json();
+      const dot = document.getElementById('microspend-dot');
+      const label = document.getElementById('microspend-status-label');
+      const amount = document.getElementById('microspend-current-amount');
+      if (data && data.active) {
+        dot.classList.add('active');
+        label.textContent = 'Active — logs every Monday';
+        amount.textContent = `R ${parseFloat(data.amount).toFixed(2)} / week`;
+        document.getElementById('microspend-amount').value = data.amount;
+      } else {
+        dot.classList.remove('active');
+        label.textContent = 'Not configured';
+        amount.textContent = 'R 0.00';
+      }
+    } catch {}
+  }
+
+  async function saveMicrospend() {
+    const amount = document.getElementById('microspend-amount').value;
+    if (!amount) return showToast('Enter an amount', 'error');
+    try {
+      const res = await fetch(`${API}/transactions/microspend`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ amount: parseFloat(amount) }) });
+      if (!res.ok) throw new Error();
+      showToast('Microspend saved', 'success');
+      loadMicrospend();
+    } catch { showToast('Failed to save', 'error'); }
+  }
+
+  async function disableMicrospend() {
+    try {
+      await fetch(`${API}/transactions/microspend`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+      showToast('Microspend disabled', 'success');
+      loadMicrospend();
+    } catch { showToast('Failed to disable', 'error'); }
   }
 
   function showPage(name, el) {
@@ -1090,14 +725,21 @@ let pendingEmail = '';
     document.getElementById(`page-${name}`).classList.add('active');
     if (el) el.classList.add('active');
     if (name === 'transactions') renderTransactions();
+    if (name === 'compare') loadComparison();
+    if (name === 'recurring') loadRecurring();
+    if (name === 'microspend') loadMicrospend();
   }
 
   function showPageMobile(name) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(`page-${name}`).classList.add('active');
-    document.getElementById(`mnav-${name}`).classList.add('active');
+    const btn = document.getElementById(`mnav-${name}`);
+    if (btn) btn.classList.add('active');
     if (name === 'transactions') renderTransactions();
+    if (name === 'compare') loadComparison();
+    if (name === 'recurring') loadRecurring();
+    if (name === 'microspend') loadMicrospend();
     window.scrollTo(0, 0);
   }
 
