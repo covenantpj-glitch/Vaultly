@@ -682,7 +682,7 @@
       <button class="auth-tab" onclick="switchTab('register')">Register</button>
     </div>
 
-    <div id="login-form">
+<div id="login-form">
       <div class="form-group">
         <label>Email Address</label>
         <input type="email" id="login-email" placeholder="your@email.com"/>
@@ -693,6 +693,19 @@
       </div>
       <button class="btn" onclick="login()">Enter →</button>
       <div class="error-msg" id="login-error"></div>
+    </div>
+
+    <div id="otp-form" style="display:none">
+      <p style="color:var(--metal-dark);font-size:0.75rem;letter-spacing:1px;margin-bottom:1.5rem;">
+        A 6-digit code was sent to your email. Enter it below.
+      </p>
+      <div class="form-group">
+        <label>Verification Code</label>
+        <input type="text" id="otp-input" placeholder="000000" maxlength="6" style="letter-spacing:8px;font-size:1.2rem;text-align:center;"/>
+      </div>
+      <button class="btn" onclick="verifyOTP()">Verify →</button>
+      <div class="error-msg" id="otp-error"></div>
+      <p style="color:var(--metal-dark);font-size:0.7rem;letter-spacing:1px;margin-top:1rem;text-align:center;cursor:pointer;" onclick="backToLogin()">← Back to login</p>
     </div>
 
     <div id="register-form" style="display:none">
@@ -889,6 +902,8 @@
     document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
   }
 
+let pendingEmail = '';
+
   async function login() {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
@@ -901,13 +916,40 @@
       });
       const data = await res.json();
       if (!res.ok) return showError('login-error', data.error);
+      if (data.requiresOTP) {
+        pendingEmail = email;
+        document.getElementById('login-form').style.display = 'none';
+        document.getElementById('otp-form').style.display = 'block';
+      }
+    } catch {
+      showError('login-error', 'Cannot connect to server');
+    }
+  }
+
+  async function verifyOTP() {
+    const otp = document.getElementById('otp-input').value;
+    if (!otp || otp.length !== 6) return showError('otp-error', 'Enter the 6-digit code');
+    try {
+      const res = await fetch(`${API}/auth/verify-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: pendingEmail, otp })
+      });
+      const data = await res.json();
+      if (!res.ok) return showError('otp-error', data.error);
       localStorage.setItem('token', data.token);
       localStorage.setItem('userName', data.name);
       token = data.token;
       showApp();
     } catch {
-      showError('login-error', 'Cannot connect to server');
+      showError('otp-error', 'Cannot connect to server');
     }
+  }
+
+  function backToLogin() {
+    document.getElementById('otp-form').style.display = 'none';
+    document.getElementById('login-form').style.display = 'block';
+    document.getElementById('otp-input').value = '';
   }
 
   async function register() {
