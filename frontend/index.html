@@ -23,7 +23,7 @@
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: var(--black2); }
     ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-
+ 
     /* AUTH */
     #auth-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; overflow: hidden; }
     #auth-screen::before { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; border: 1px solid rgba(200,200,200,0.04); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
@@ -45,11 +45,11 @@
     .btn { width: 100%; background: linear-gradient(135deg, #d0d0d0, #ffffff, #d0d0d0); color: var(--black); border: none; padding: 0.85rem; border-radius: 2px; font-weight: 700; font-size: 0.72rem; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; font-family: 'Montserrat', sans-serif; transition: all 0.2s; margin-top: 0.8rem; }
     .btn:hover { background: linear-gradient(135deg, #ffffff, #e0e0e0, #ffffff); }
     .error-msg { color: var(--red-text); font-size: 0.72rem; letter-spacing: 1px; margin-top: 0.8rem; text-align: center; }
-
+ 
     /* APP */
     #app-screen { display: none; min-height: 100vh; }
     .layout { display: flex; min-height: 100vh; }
-
+ 
     /* SIDEBAR */
     .sidebar { width: 220px; background: var(--black2); border-right: 1px solid var(--border); padding: 2rem 0; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; }
     .sidebar-logo { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.3rem; letter-spacing: 3px; text-transform: uppercase; padding: 0 1.5rem 1.5rem; border-bottom: 1px solid var(--border); }
@@ -67,7 +67,7 @@
     .sidebar-footer { padding: 1.5rem; border-top: 1px solid var(--border); }
     .logout-btn { color: var(--metal-dark) !important; font-size: 0.68rem !important; padding: 0.5rem 0 !important; width: auto !important; letter-spacing: 2px !important; }
     .logout-btn:hover { color: var(--red-text) !important; }
-
+ 
     /* MAIN */
     .main { margin-left: 220px; padding: 3rem; flex: 1; }
     .page { display: none; animation: fadeIn 0.3s ease; }
@@ -77,7 +77,7 @@
     .page-eyebrow { font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
     .page-title { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 2.5rem; letter-spacing: 1px; line-height: 1; }
     .page-rule { width: 50px; height: 1px; background: linear-gradient(90deg, var(--metal), transparent); margin-top: 1rem; }
-
+ 
     /* SUMMARY CARDS */
     .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 3rem; }
     .summary-card { background: var(--black2); padding: 2rem; }
@@ -87,12 +87,12 @@
     .summary-amount.expense { color: var(--red-text); }
     .summary-amount.balance { color: var(--white); }
     .summary-sub { font-size: 0.62rem; letter-spacing: 1px; color: var(--border2); margin-top: 0.5rem; }
-
+ 
     /* SECTION HEADER */
     .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
     .section-title { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--metal); }
     .filter-select { background: transparent; border: 1px solid var(--border); color: var(--metal-dark); font-family: 'Montserrat', sans-serif; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; padding: 0.4rem 0.8rem; outline: none; cursor: pointer; width: auto; }
-
+ 
     /* TRANSACTIONS */
     .transactions-list { display: flex; flex-direction: column; }
     .tx-item { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 0; border-bottom: 1px solid var(--border); transition: padding-left 0.2s; }
@@ -111,7 +111,7 @@
     .tx-delete { background: none; border: none; color: var(--border2); cursor: pointer; font-size: 0.62rem; letter-spacing: 1.5px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; padding: 0.3rem; transition: color 0.2s; }
     .tx-delete:hover { color: var(--red-text); }
     .empty-state { padding: 4rem 0; text-align: center; font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--border2); }
-
+ 
     /* ADD FORM */
     .add-form { border: 1px solid var(--border); padding: 2.5rem; position: relative; margin-bottom: 2rem; }
     .add-form::before, .add-form::after { content: ''; position: absolute; width: 12px; height: 12px; }
@@ -123,7 +123,7 @@
     .add-btn:hover { background: var(--white); color: var(--black); border-color: var(--white); }
     .danger-btn { border-color: var(--red-text) !important; color: var(--red-text) !important; }
     .danger-btn:hover { background: var(--red-text) !important; color: var(--white) !important; }
-
+ 
     /* MONTH COMPARISON */
     .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 2rem; }
     .comparison-card { background: var(--black2); padding: 2rem; }
@@ -136,7 +136,7 @@
     .change-up { background: rgba(122,184,122,0.1); color: var(--green-text); }
     .change-down { background: rgba(184,122,122,0.1); color: var(--red-text); }
     .chart-container { background: var(--black2); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
-
+ 
     /* RECURRING */
     .recurring-item { display: flex; align-items: center; justify-content: space-between; padding: 1rem 0; border-bottom: 1px solid var(--border); }
     .recurring-item:last-child { border-bottom: none; }
@@ -145,7 +145,7 @@
     .recurring-meta { font-size: 0.62rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--metal-dark); }
     .recurring-right { display: flex; align-items: center; gap: 1.5rem; }
     .recurring-amount { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; }
-
+ 
     /* MICROSPEND */
     .microspend-box { background: var(--black2); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; position: relative; }
     .microspend-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); }
@@ -155,13 +155,20 @@
     .microspend-label { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--metal-dark); }
     .microspend-amount { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 600; color: var(--white); margin-bottom: 0.3rem; }
     .microspend-sub { font-size: 0.62rem; letter-spacing: 1px; color: var(--metal-dark); margin-bottom: 1.5rem; }
-
+ 
+    /* INSIGHTS */
+    .insights-box { background: var(--black2); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; position: relative; }
+    .insights-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--gold), var(--gold2), transparent); }
+    .insights-content { font-size: 0.9rem; color: var(--white2); line-height: 2; white-space: pre-line; }
+    .insights-loading { font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--metal-dark); display: none; }
+    .insights-disclaimer { font-size: 0.62rem; letter-spacing: 1px; color: var(--border2); margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+ 
     /* TOAST */
     .toast { position: fixed; bottom: 5rem; right: 1rem; padding: 1rem 1.5rem; border-left: 2px solid var(--metal); background: var(--black2); font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; transform: translateX(120%); opacity: 0; transition: all 0.3s; z-index: 1000; }
     .toast.show { transform: translateX(0); opacity: 1; }
     .toast.success { border-left-color: var(--green-text); color: var(--green-text); }
     .toast.error { border-left-color: var(--red-text); color: var(--red-text); }
-
+ 
     /* MOBILE */
     .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--black2); border-top: 1px solid var(--border); z-index: 200; }
     .mobile-nav-inner { display: flex; align-items: stretch; }
@@ -174,7 +181,7 @@
     .mobile-topbar { display: none; position: fixed; top: 0; left: 0; right: 0; background: var(--black2); border-bottom: 1px solid var(--border); padding: 1rem 1.5rem; z-index: 200; align-items: center; justify-content: space-between; }
     .mobile-topbar-logo { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.2rem; letter-spacing: 3px; text-transform: uppercase; }
     .mobile-topbar-user { font-size: 0.65rem; letter-spacing: 1px; color: var(--metal-dark); text-transform: uppercase; }
-
+ 
     @media (max-width: 768px) {
       .sidebar { display: none; }
       .mobile-nav { display: flex; }
@@ -190,7 +197,7 @@
   </style>
 </head>
 <body>
-
+ 
 <!-- AUTH -->
 <div id="auth-screen">
   <div class="auth-box">
@@ -223,14 +230,14 @@
     </div>
   </div>
 </div>
-
+ 
 <!-- APP -->
 <div id="app-screen">
   <div class="mobile-topbar">
     <div class="mobile-topbar-logo metal-text">Vaultly</div>
     <div class="mobile-topbar-user" id="mobile-user-name">—</div>
   </div>
-
+ 
   <div class="layout">
     <div class="sidebar">
       <div class="sidebar-logo metal-text">VT</div>
@@ -248,14 +255,15 @@
         <button class="nav-item" onclick="showPage('compare', this)">⇌ &nbsp;Compare</button>
         <button class="nav-item" onclick="showPage('recurring', this)">↻ &nbsp;Recurring</button>
         <button class="nav-item" onclick="showPage('microspend', this)">◎ &nbsp;Microspend</button>
+        <button class="nav-item" onclick="showPage('insights', this)">✦ &nbsp;Insights</button>
       </div>
       <div class="sidebar-footer">
         <button class="nav-item logout-btn" onclick="logout()">← Sign Out</button>
       </div>
     </div>
-
+ 
     <div class="main">
-
+ 
       <!-- DASHBOARD -->
       <div class="page active" id="page-dashboard">
         <div class="page-header">
@@ -283,7 +291,7 @@
         <div class="section-header"><div class="section-title">Recent Activity</div></div>
         <div class="transactions-list" id="recent-list"><div class="empty-state">No transactions recorded</div></div>
       </div>
-
+ 
       <!-- TRANSACTIONS -->
       <div class="page" id="page-transactions">
         <div class="page-header">
@@ -301,7 +309,7 @@
         </div>
         <div class="transactions-list" id="all-list"><div class="empty-state">No transactions recorded</div></div>
       </div>
-
+ 
       <!-- ADD -->
       <div class="page" id="page-add">
         <div class="page-header">
@@ -322,7 +330,7 @@
           <button class="add-btn" onclick="addTransaction()">Record Entry →</button>
         </div>
       </div>
-
+ 
       <!-- COMPARE -->
       <div class="page" id="page-compare">
         <div class="page-header">
@@ -339,7 +347,7 @@
           <canvas id="monthChart" height="120"></canvas>
         </div>
       </div>
-
+ 
       <!-- RECURRING -->
       <div class="page" id="page-recurring">
         <div class="page-header">
@@ -363,7 +371,7 @@
         <div class="section-header"><div class="section-title">Active Recurring</div></div>
         <div id="recurring-list"><div class="empty-state">No recurring transactions set up</div></div>
       </div>
-
+ 
       <!-- MICROSPEND -->
       <div class="page" id="page-microspend">
         <div class="page-header">
@@ -396,10 +404,30 @@
           </div>
         </div>
       </div>
-
+ 
+      <!-- INSIGHTS -->
+      <div class="page" id="page-insights">
+        <div class="page-header">
+          <div class="page-eyebrow">AI Powered</div>
+          <div class="page-title metal-text">Insights</div>
+          <div class="page-rule"></div>
+        </div>
+        <div class="insights-box">
+          <div class="microspend-status">
+            <div class="microspend-dot active"></div>
+            <div class="microspend-label">Powered by Claude AI</div>
+          </div>
+          <p style="font-size:0.78rem;color:var(--metal-dark);line-height:1.7;margin-bottom:1.5rem;">Smart observations based on your spending patterns. This is not financial advice.</p>
+          <div class="insights-content" id="insights-content"></div>
+          <div class="insights-loading" id="insights-loading">Analysing your finances...</div>
+          <div class="insights-disclaimer">These observations are generated by AI based on your transaction data and are for informational purposes only. They do not constitute financial advice.</div>
+          <button class="add-btn" style="margin-top:1.5rem;" onclick="loadInsights()">Refresh Insights →</button>
+        </div>
+      </div>
+ 
     </div>
   </div>
-
+ 
   <!-- MOBILE BOTTOM NAV -->
   <div class="mobile-nav">
     <div class="mobile-nav-inner">
@@ -407,24 +435,24 @@
       <button class="mobile-nav-btn" id="mnav-transactions" onclick="showPageMobile('transactions')"><span class="mobile-nav-icon">≡</span><span>History</span></button>
       <button class="mobile-nav-btn" id="mnav-add" onclick="showPageMobile('add')"><span class="mobile-nav-icon">+</span><span>Add</span></button>
       <button class="mobile-nav-btn" id="mnav-compare" onclick="showPageMobile('compare')"><span class="mobile-nav-icon">⇌</span><span>Compare</span></button>
-      <button class="mobile-nav-btn" id="mnav-recurring" onclick="showPageMobile('recurring')"><span class="mobile-nav-icon">↻</span><span>Auto</span></button>
+      <button class="mobile-nav-btn" id="mnav-insights" onclick="showPageMobile('insights')"><span class="mobile-nav-icon">✦</span><span>Insights</span></button>
       <button class="mobile-nav-btn logout-mobile" onclick="logout()"><span class="mobile-nav-icon">←</span><span>Out</span></button>
     </div>
   </div>
 </div>
-
+ 
 <div class="toast" id="toast"></div>
-
+ 
 <script>
   const API = 'https://vaultly-production.up.railway.app/api';
   let token = localStorage.getItem('token');
   let transactions = [];
   let pendingEmail = '';
   let monthChart = null;
-
+ 
   document.getElementById('tx-date').valueAsDate = new Date();
   if (token) showApp();
-
+ 
   function switchTab(tab) {
     document.querySelectorAll('.auth-tab').forEach((t, i) => {
       t.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'register'));
@@ -433,7 +461,7 @@
     document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
     document.getElementById('otp-form').style.display = 'none';
   }
-
+ 
   async function login() {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
@@ -449,7 +477,7 @@
       }
     } catch { showError('login-error', 'Cannot connect to server'); }
   }
-
+ 
   async function verifyOTP() {
     const otp = document.getElementById('otp-input').value;
     if (!otp || otp.length !== 6) return showError('otp-error', 'Enter the 6-digit code');
@@ -463,13 +491,13 @@
       showApp();
     } catch { showError('otp-error', 'Cannot connect to server'); }
   }
-
+ 
   function backToLogin() {
     document.getElementById('otp-form').style.display = 'none';
     document.getElementById('login-form').style.display = 'block';
     document.getElementById('otp-input').value = '';
   }
-
+ 
   async function register() {
     const name = document.getElementById('reg-name').value;
     const email = document.getElementById('reg-email').value;
@@ -483,7 +511,7 @@
       switchTab('login');
     } catch { showError('reg-error', 'Cannot connect to server'); }
   }
-
+ 
   function showApp() {
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('app-screen').style.display = 'block';
@@ -493,7 +521,7 @@
     loadTransactions();
     loadMicrospend();
   }
-
+ 
   function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('userName');
@@ -502,7 +530,7 @@
     document.getElementById('auth-screen').style.display = 'flex';
     document.getElementById('app-screen').style.display = 'none';
   }
-
+ 
   async function loadTransactions() {
     try {
       const res = await fetch(`${API}/transactions`, { headers: { 'Authorization': `Bearer ${token}` } });
@@ -512,7 +540,7 @@
       renderTransactions();
     } catch { showToast('Failed to load data', 'error'); }
   }
-
+ 
   async function addTransaction() {
     const type = document.getElementById('tx-type').value;
     const category = document.getElementById('tx-category').value;
@@ -530,7 +558,7 @@
       loadTransactions();
     } catch { showToast('Failed to add entry', 'error'); }
   }
-
+ 
   async function deleteTransaction(id) {
     try {
       await fetch(`${API}/transactions/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
@@ -538,7 +566,7 @@
       loadTransactions();
     } catch { showToast('Failed to delete', 'error'); }
   }
-
+ 
   function updateSummary() {
     const income = transactions.filter(t => t.type === 'income').reduce((s, t) => s + parseFloat(t.amount), 0);
     const expense = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + parseFloat(t.amount), 0);
@@ -549,26 +577,26 @@
     balEl.textContent = `R ${balance.toFixed(2)}`;
     balEl.className = `summary-amount ${balance >= 0 ? 'income' : 'expense'}`;
   }
-
+ 
   function renderRecentList() {
     const list = document.getElementById('recent-list');
     const recent = transactions.slice(0, 5);
     list.innerHTML = recent.length ? recent.map(txHTML).join('') : '<div class="empty-state">No transactions recorded</div>';
   }
-
+ 
   function renderTransactions() {
     const filter = document.getElementById('filter-type')?.value || 'all';
     const filtered = filter === 'all' ? transactions : transactions.filter(t => t.type === filter);
     const list = document.getElementById('all-list');
     list.innerHTML = filtered.length ? filtered.map(txHTML).join('') : '<div class="empty-state">No entries found</div>';
   }
-
+ 
   function txHTML(t) {
     const date = new Date(t.date).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
     const sign = t.type === 'income' ? '+' : '−';
     return `<div class="tx-item"><div class="tx-left"><div class="tx-marker ${t.type}"></div><div><div class="tx-desc">${t.description || t.category}</div><div class="tx-meta">${t.category} · ${date}</div></div></div><div class="tx-right"><div class="tx-amount ${t.type}">${sign} R ${parseFloat(t.amount).toFixed(2)}</div><button class="tx-delete" onclick="deleteTransaction(${t.id})">Remove</button></div></div>`;
   }
-
+ 
   async function loadComparison() {
     try {
       const res = await fetch(`${API}/transactions/monthly-summary`, { headers: { 'Authorization': `Bearer ${token}` } });
@@ -633,7 +661,7 @@
       });
     } catch(e) { console.error(e); }
   }
-
+ 
   async function loadRecurring() {
     try {
       const res = await fetch(`${API}/transactions/recurring`, { headers: { 'Authorization': `Bearer ${token}` } });
@@ -653,7 +681,7 @@
         </div>`).join('');
     } catch { showToast('Failed to load recurring', 'error'); }
   }
-
+ 
   async function addRecurring() {
     const type = document.getElementById('rec-type').value;
     const category = document.getElementById('rec-category').value;
@@ -671,7 +699,7 @@
       loadRecurring();
     } catch { showToast('Failed to add recurring', 'error'); }
   }
-
+ 
   async function deleteRecurring(id) {
     try {
       await fetch(`${API}/transactions/recurring/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
@@ -679,7 +707,7 @@
       loadRecurring();
     } catch { showToast('Failed to delete', 'error'); }
   }
-
+ 
   async function loadMicrospend() {
     try {
       const res = await fetch(`${API}/transactions/microspend`, { headers: { 'Authorization': `Bearer ${token}` } });
@@ -699,7 +727,7 @@
       }
     } catch {}
   }
-
+ 
   async function saveMicrospend() {
     const amount = document.getElementById('microspend-amount').value;
     if (!amount) return showToast('Enter an amount', 'error');
@@ -710,7 +738,7 @@
       loadMicrospend();
     } catch { showToast('Failed to save', 'error'); }
   }
-
+ 
   async function disableMicrospend() {
     try {
       await fetch(`${API}/transactions/microspend`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
@@ -718,7 +746,23 @@
       loadMicrospend();
     } catch { showToast('Failed to disable', 'error'); }
   }
-
+ 
+  async function loadInsights() {
+    const content = document.getElementById('insights-content');
+    const loading = document.getElementById('insights-loading');
+    content.textContent = '';
+    loading.style.display = 'block';
+    try {
+      const res = await fetch(`${API}/insights`, { headers: { 'Authorization': `Bearer ${token}` } });
+      const data = await res.json();
+      loading.style.display = 'none';
+      content.textContent = data.insight || 'No insights available yet.';
+    } catch {
+      loading.style.display = 'none';
+      content.textContent = 'Failed to load insights. Try again.';
+    }
+  }
+ 
   function showPage(name, el) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -728,8 +772,9 @@
     if (name === 'compare') loadComparison();
     if (name === 'recurring') loadRecurring();
     if (name === 'microspend') loadMicrospend();
+    if (name === 'insights') loadInsights();
   }
-
+ 
   function showPageMobile(name) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
@@ -740,11 +785,12 @@
     if (name === 'compare') loadComparison();
     if (name === 'recurring') loadRecurring();
     if (name === 'microspend') loadMicrospend();
+    if (name === 'insights') loadInsights();
     window.scrollTo(0, 0);
   }
-
+ 
   function showError(id, msg) { document.getElementById(id).textContent = msg; }
-
+ 
   function showToast(msg, type) {
     const t = document.getElementById('toast');
     t.textContent = msg;
@@ -754,3 +800,4 @@
 </script>
 </body>
 </html>
+ 
