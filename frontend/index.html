@@ -3,36 +3,108 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title><link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230a0a0a'/><circle cx='16' cy='16' r='10' fill='none' stroke='%23a0a0a0' stroke-width='2'/><circle cx='16' cy='16' r='4' fill='%23c9a84c'/><line x1='16' y1='6' x2='16' y2='9' stroke='%23c9a84c' stroke-width='2' stroke-linecap='round'/><line x1='16' y1='23' x2='16' y2='26' stroke='%23c9a84c' stroke-width='2' stroke-linecap='round'/><line x1='6' y1='16' x2='9' y2='16' stroke='%23c9a84c' stroke-width='2' stroke-linecap='round'/><line x1='23' y1='16' x2='26' y2='16' stroke='%23c9a84c' stroke-width='2' stroke-linecap='round'/><rect x='22' y='14' width='7' height='4' rx='2' fill='%23888888'/></svg>"/>Vaultly | Personal Finance</title>
+  <title>Vaultly | Personal Finance</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230a0a0a'/><circle cx='16' cy='16' r='10' fill='none' stroke='%23a0a0a0' stroke-width='2'/><circle cx='16' cy='16' r='4' fill='%23c9a84c'/><line x1='16' y1='6' x2='16' y2='9' stroke='%23c9a84c' stroke-width='2' stroke-linecap='round'/><line x1='16' y1='23' x2='16' y2='26' stroke='%23c9a84c' stroke-width='2' stroke-linecap='round'/><line x1='6' y1='16' x2='9' y2='16' stroke='%23c9a84c' stroke-width='2' stroke-linecap='round'/><line x1='23' y1='16' x2='26' y2='16' stroke='%23c9a84c' stroke-width='2' stroke-linecap='round'/><rect x='22' y='14' width='7' height='4' rx='2' fill='%23888888'/></svg>"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --black: #0a0a0a; --black2: #111111; --black3: #1a1a1a; --black4: #222222;
-      --border: #2a2a2a; --border2: #333333; --metal-light: #c8c8c8; --metal: #a0a0a0;
-      --metal-dark: #707070; --white: #f0f0f0; --white2: #d8d8d8;
-      --green-text: #7ab87a; --red-text: #b87a7a; --gold: #c9a84c; --gold2: #e8c97a;
+      --black: #0a0a0a; --black2: #111111; --black3: #1a1a1a;
+      --border: #2a2a2a; --border2: #333333;
+      --metal: #a0a0a0; --metal-dark: #707070;
+      --white: #f0f0f0; --white2: #d8d8d8;
+      --green-text: #7ab87a; --red-text: #b87a7a;
+      --gold: #c9a84c; --gold2: #e8c97a;
     }
     html { scroll-behavior: smooth; }
     body { font-family: 'Montserrat', sans-serif; background: var(--black); color: var(--white); min-height: 100vh; }
+ 
+    /* METALLIC TEXT */
     .metal-text {
       background: linear-gradient(135deg, #ffffff 0%, #c0c0c0 30%, #808080 60%, #c0c0c0 80%, #ffffff 100%);
       -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
     }
+    .gold-text {
+      background: linear-gradient(135deg, #e8c97a, #c9a84c, #e8c97a);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+ 
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: var(--black2); }
     ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
  
-    /* AUTH */
+    /* ═══ VAULT LOADING SCREEN ═══ */
+    #vault-loader {
+      position: fixed; inset: 0; background: var(--black);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 9999; transition: opacity 0.6s ease;
+    }
+    #vault-loader.fade-out { opacity: 0; pointer-events: none; }
+ 
+    .vault-svg { width: 140px; height: 140px; }
+ 
+    /* Outer ring spin */
+    @keyframes ring-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    /* Handle swing open */
+    @keyframes handle-open { 0%,60% { transform: translateX(0); } 100% { transform: translateX(18px); } }
+    /* Door swing */
+    @keyframes door-open { 0%,60% { transform: scaleX(1); } 100% { transform: scaleX(0.15); } }
+    /* Gold glow pulse */
+    @keyframes gold-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    /* Unlock flash */
+    @keyframes unlock-flash { 0%,70% { opacity: 0; } 80% { opacity: 1; } 100% { opacity: 0; } }
+    /* Spoke appear */
+    @keyframes spoke-appear { 0%,40% { opacity: 0; } 100% { opacity: 1; } }
+ 
+    .ring-outer { transform-origin: 70px 70px; animation: ring-spin 3s linear infinite; }
+    .ring-inner { transform-origin: 70px 70px; animation: ring-spin 3s linear reverse infinite; }
+    .vault-handle { transform-origin: 98px 70px; animation: handle-open 2.5s ease-in-out infinite; }
+    .vault-door { transform-origin: 40px 70px; animation: door-open 2.5s ease-in-out infinite; }
+    .gold-center { animation: gold-pulse 1.2s ease-in-out infinite; }
+    .unlock-flash { animation: unlock-flash 2.5s ease-in-out infinite; }
+    .spoke { animation: spoke-appear 2.5s ease-in-out infinite; }
+ 
+    .vault-loading-text {
+      margin-top: 2rem;
+      font-size: 0.65rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--metal-dark);
+      animation: gold-pulse 1.5s ease-in-out infinite;
+    }
+ 
+    /* ═══ VAULT LOGO COMPONENT ═══ */
+    .vault-logo-full {
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .vault-icon {
+      flex-shrink: 0;
+    }
+    .vault-wordmark {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    .vault-tagline {
+      font-size: 0.55rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--metal-dark);
+      margin-top: 0.2rem;
+    }
+ 
+    /* ═══ AUTH ═══ */
     #auth-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; overflow: hidden; }
     #auth-screen::before { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; border: 1px solid rgba(200,200,200,0.04); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; }
-    .auth-box { background: var(--black2); border: 1px solid var(--border); border-radius: 4px; padding: 3rem; width: 100%; max-width: 400px; position: relative; z-index: 1; }
+    .auth-box { background: var(--black2); border: 1px solid var(--border); border-radius: 4px; padding: 3rem; width: 100%; max-width: 420px; position: relative; z-index: 1; }
     .auth-box::before, .auth-box::after { content: ''; position: absolute; width: 16px; height: 16px; }
     .auth-box::before { top: -1px; left: -1px; border-top: 2px solid var(--metal); border-left: 2px solid var(--metal); }
     .auth-box::after { bottom: -1px; right: -1px; border-bottom: 2px solid var(--metal); border-right: 2px solid var(--metal); }
-    .auth-logo { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 2rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.3rem; }
-    .auth-divider { width: 40px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin: 0.8rem 0 1.5rem; }
+    .auth-logo-wrap { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.5rem; }
+    .auth-divider { width: 40px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin: 0.6rem 0 1.2rem; }
     .auth-sub { color: var(--metal-dark); font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2.5rem; }
     .auth-tabs { display: flex; margin-bottom: 2rem; border-bottom: 1px solid var(--border); }
     .auth-tab { flex: 1; padding: 0.7rem; border: none; border-bottom: 2px solid transparent; background: transparent; color: var(--metal-dark); font-family: 'Montserrat', sans-serif; font-size: 0.72rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; margin-bottom: -1px; }
@@ -46,30 +118,31 @@
     .btn:hover { background: linear-gradient(135deg, #ffffff, #e0e0e0, #ffffff); }
     .error-msg { color: var(--red-text); font-size: 0.72rem; letter-spacing: 1px; margin-top: 0.8rem; text-align: center; }
  
-    /* APP */
+    /* ═══ APP ═══ */
     #app-screen { display: none; min-height: 100vh; }
     .layout { display: flex; min-height: 100vh; }
  
     /* SIDEBAR */
-    .sidebar { width: 220px; background: var(--black2); border-right: 1px solid var(--border); padding: 2rem 0; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; }
-    .sidebar-logo { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.3rem; letter-spacing: 3px; text-transform: uppercase; padding: 0 1.5rem 1.5rem; border-bottom: 1px solid var(--border); }
-    .sidebar-accent { width: 24px; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin: 0.5rem 1.5rem 0; }
-    .sidebar-user { padding: 1.5rem; border-bottom: 1px solid var(--border); }
-    .sidebar-user-label { font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--metal-dark); margin-bottom: 0.3rem; }
+    .sidebar { width: 230px; background: var(--black2); border-right: 1px solid var(--border); padding: 0; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; }
+    .sidebar-brand { padding: 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.8rem; }
+    .sidebar-brand-text { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.2rem; letter-spacing: 3px; text-transform: uppercase; }
+    .sidebar-gold-rule { width: 100%; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); margin: 0; }
+    .sidebar-user { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border); }
+    .sidebar-user-label { font-size: 0.58rem; letter-spacing: 2px; text-transform: uppercase; color: var(--metal-dark); margin-bottom: 0.3rem; }
     .sidebar-user-name { font-size: 0.85rem; font-weight: 500; color: var(--white); }
     .nav-section { padding: 1.5rem 0; flex: 1; overflow-y: auto; }
-    .nav-section-label { font-size: 0.58rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--border2); padding: 0 1.5rem; margin-bottom: 0.5rem; }
-    .nav-item { display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 1.5rem; color: var(--metal-dark); font-size: 0.75rem; font-weight: 500; letter-spacing: 1.5px; cursor: pointer; transition: all 0.15s; border: none; background: none; width: 100%; text-align: left; font-family: 'Montserrat', sans-serif; text-transform: uppercase; position: relative; }
+    .nav-section-label { font-size: 0.55rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--border2); padding: 0 1.5rem; margin-bottom: 0.5rem; }
+    .nav-item { display: flex; align-items: center; gap: 0.8rem; padding: 0.75rem 1.5rem; color: var(--metal-dark); font-size: 0.72rem; font-weight: 500; letter-spacing: 1.5px; cursor: pointer; transition: all 0.15s; border: none; background: none; width: 100%; text-align: left; font-family: 'Montserrat', sans-serif; text-transform: uppercase; position: relative; }
     .nav-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--gold), var(--gold2)); opacity: 0; transition: opacity 0.2s; }
     .nav-item:hover { color: var(--white2); }
     .nav-item.active { color: var(--white); }
     .nav-item.active::before { opacity: 1; }
     .sidebar-footer { padding: 1.5rem; border-top: 1px solid var(--border); }
-    .logout-btn { color: var(--metal-dark) !important; font-size: 0.68rem !important; padding: 0.5rem 0 !important; width: auto !important; letter-spacing: 2px !important; }
+    .logout-btn { color: var(--metal-dark) !important; font-size: 0.65rem !important; padding: 0.5rem 0 !important; width: auto !important; letter-spacing: 2px !important; }
     .logout-btn:hover { color: var(--red-text) !important; }
  
     /* MAIN */
-    .main { margin-left: 220px; padding: 3rem; flex: 1; }
+    .main { margin-left: 230px; padding: 3rem; flex: 1; }
     .page { display: none; animation: fadeIn 0.3s ease; }
     .page.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
@@ -78,7 +151,7 @@
     .page-title { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 2.5rem; letter-spacing: 1px; line-height: 1; }
     .page-rule { width: 50px; height: 1px; background: linear-gradient(90deg, var(--metal), transparent); margin-top: 1rem; }
  
-    /* SUMMARY CARDS */
+    /* SUMMARY */
     .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 3rem; }
     .summary-card { background: var(--black2); padding: 2rem; }
     .summary-label { font-size: 0.6rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--metal-dark); margin-bottom: 1rem; }
@@ -88,7 +161,7 @@
     .summary-amount.balance { color: var(--white); }
     .summary-sub { font-size: 0.62rem; letter-spacing: 1px; color: var(--border2); margin-top: 0.5rem; }
  
-    /* SECTION HEADER */
+    /* SECTION */
     .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
     .section-title { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--metal); }
     .filter-select { background: transparent; border: 1px solid var(--border); color: var(--metal-dark); font-family: 'Montserrat', sans-serif; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; padding: 0.4rem 0.8rem; outline: none; cursor: pointer; width: auto; }
@@ -112,7 +185,7 @@
     .tx-delete:hover { color: var(--red-text); }
     .empty-state { padding: 4rem 0; text-align: center; font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--border2); }
  
-    /* ADD FORM */
+    /* FORMS */
     .add-form { border: 1px solid var(--border); padding: 2.5rem; position: relative; margin-bottom: 2rem; }
     .add-form::before, .add-form::after { content: ''; position: absolute; width: 12px; height: 12px; }
     .add-form::before { top: -1px; right: -1px; border-top: 1px solid var(--metal-dark); border-right: 1px solid var(--metal-dark); }
@@ -124,7 +197,7 @@
     .danger-btn { border-color: var(--red-text) !important; color: var(--red-text) !important; }
     .danger-btn:hover { background: var(--red-text) !important; color: var(--white) !important; }
  
-    /* MONTH COMPARISON */
+    /* COMPARISON */
     .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 2rem; }
     .comparison-card { background: var(--black2); padding: 2rem; }
     .comparison-month { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
@@ -146,22 +219,24 @@
     .recurring-right { display: flex; align-items: center; gap: 1.5rem; }
     .recurring-amount { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; }
  
-    /* MICROSPEND */
-    .microspend-box { background: var(--black2); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; position: relative; }
-    .microspend-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); }
-    .microspend-status { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; }
-    .microspend-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border2); }
-    .microspend-dot.active { background: var(--green-text); box-shadow: 0 0 6px var(--green-text); }
-    .microspend-label { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--metal-dark); }
-    .microspend-amount { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 600; color: var(--white); margin-bottom: 0.3rem; }
-    .microspend-sub { font-size: 0.62rem; letter-spacing: 1px; color: var(--metal-dark); margin-bottom: 1.5rem; }
- 
-    /* INSIGHTS */
-    .insights-box { background: var(--black2); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; position: relative; }
-    .insights-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--gold), var(--gold2), transparent); }
+    /* MICROSPEND / INSIGHTS */
+    .feature-box { background: var(--black2); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; position: relative; }
+    .feature-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); }
+    .feature-status { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; }
+    .feature-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border2); }
+    .feature-dot.active { background: var(--green-text); box-shadow: 0 0 6px var(--green-text); }
+    .feature-label { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--metal-dark); }
+    .feature-amount { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 600; color: var(--white); margin-bottom: 0.3rem; }
+    .feature-sub { font-size: 0.62rem; letter-spacing: 1px; color: var(--metal-dark); margin-bottom: 1.5rem; }
     .insights-content { font-size: 0.9rem; color: var(--white2); line-height: 2; white-space: pre-line; }
     .insights-loading { font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--metal-dark); display: none; }
     .insights-disclaimer { font-size: 0.62rem; letter-spacing: 1px; color: var(--border2); margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+ 
+    /* INLINE VAULT SPINNER (used during data loads) */
+    .vault-spinner-wrap { display: flex; flex-direction: column; align-items: center; padding: 3rem 0; gap: 1rem; }
+    .vault-spinner-wrap svg { width: 48px; height: 48px; }
+    .vault-spinner-wrap .ring-outer { animation: ring-spin 2s linear infinite; }
+    .vault-spinner-label { font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--metal-dark); }
  
     /* TOAST */
     .toast { position: fixed; bottom: 5rem; right: 1rem; padding: 1rem 1.5rem; border-left: 2px solid var(--metal); background: var(--black2); font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; transform: translateX(120%); opacity: 0; transition: all 0.3s; z-index: 1000; }
@@ -176,11 +251,9 @@
     .mobile-nav-btn.active { color: var(--white); border-top-color: var(--gold); }
     .mobile-nav-btn:hover { color: var(--white2); }
     .mobile-nav-icon { font-size: 1rem; line-height: 1; }
-    .mobile-nav-btn.logout-mobile { color: var(--metal-dark); }
     .mobile-nav-btn.logout-mobile:hover { color: var(--red-text); }
-    .mobile-topbar { display: none; position: fixed; top: 0; left: 0; right: 0; background: var(--black2); border-bottom: 1px solid var(--border); padding: 1rem 1.5rem; z-index: 200; align-items: center; justify-content: space-between; }
-    .mobile-topbar-logo { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 1.2rem; letter-spacing: 3px; text-transform: uppercase; }
-    .mobile-topbar-user { font-size: 0.65rem; letter-spacing: 1px; color: var(--metal-dark); text-transform: uppercase; }
+    .mobile-topbar { display: none; position: fixed; top: 0; left: 0; right: 0; background: var(--black2); border-bottom: 1px solid var(--border); padding: 0.8rem 1.5rem; z-index: 200; align-items: center; justify-content: space-between; }
+    .mobile-topbar-user { font-size: 0.6rem; letter-spacing: 1px; color: var(--metal-dark); text-transform: uppercase; }
  
     @media (max-width: 768px) {
       .sidebar { display: none; }
@@ -198,12 +271,94 @@
 </head>
 <body>
  
+<!-- ═══ VAULT LOADER ═══ -->
+<div id="vault-loader">
+  <svg class="vault-svg" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="lmetal" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#ffffff"/><stop offset="40%" stop-color="#c0c0c0"/>
+        <stop offset="70%" stop-color="#808080"/><stop offset="100%" stop-color="#c0c0c0"/>
+      </linearGradient>
+      <linearGradient id="lgold" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#e8c97a"/><stop offset="50%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#e8c97a"/>
+      </linearGradient>
+    </defs>
+    <!-- Background -->
+    <rect width="140" height="140" rx="24" fill="#111111" stroke="url(#lmetal)" stroke-width="1.5"/>
+    <!-- Outer spinning ring -->
+    <g class="ring-outer">
+      <circle cx="70" cy="70" r="50" fill="none" stroke="url(#lmetal)" stroke-width="2" stroke-dasharray="8 4"/>
+    </g>
+    <!-- Inner counter-spinning ring -->
+    <g class="ring-inner">
+      <circle cx="70" cy="70" r="38" fill="none" stroke="#333333" stroke-width="1.5" stroke-dasharray="5 3"/>
+    </g>
+    <!-- Door group -->
+    <g class="vault-door">
+      <circle cx="70" cy="70" r="28" fill="#0a0a0a" stroke="url(#lmetal)" stroke-width="2.5"/>
+      <!-- Cardinal spokes -->
+      <g class="spoke">
+        <line x1="70" y1="42" x2="70" y2="52" stroke="url(#lgold)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="70" y1="88" x2="70" y2="98" stroke="url(#lgold)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="42" y1="70" x2="52" y2="70" stroke="url(#lgold)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="88" y1="70" x2="98" y2="70" stroke="url(#lgold)" stroke-width="2.5" stroke-linecap="round"/>
+      </g>
+      <!-- Diagonal spokes -->
+      <g class="spoke">
+        <line x1="50" y1="50" x2="57" y2="57" stroke="url(#lmetal)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="90" y1="50" x2="83" y2="57" stroke="url(#lmetal)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="50" y1="90" x2="57" y2="83" stroke="url(#lmetal)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="90" y1="90" x2="83" y2="83" stroke="url(#lmetal)" stroke-width="1.5" stroke-linecap="round"/>
+      </g>
+      <!-- Center gem -->
+      <circle cx="70" cy="70" r="10" fill="#111111" stroke="url(#lgold)" stroke-width="1.5"/>
+      <circle cx="70" cy="70" r="5" fill="url(#lgold)" class="gold-center"/>
+    </g>
+    <!-- Handle -->
+    <g class="vault-handle">
+      <rect x="90" y="66" width="20" height="8" rx="4" fill="url(#lmetal)"/>
+      <circle cx="110" cy="70" r="5" fill="none" stroke="url(#lmetal)" stroke-width="1.5"/>
+    </g>
+    <!-- Unlock flash -->
+    <circle cx="70" cy="70" r="55" fill="none" stroke="#c9a84c" stroke-width="3" class="unlock-flash" opacity="0"/>
+  </svg>
+  <div class="vault-loading-text" id="loader-text">Unlocking vault...</div>
+</div>
+ 
+<!-- VAULT ICON SVG TEMPLATE (reusable inline) -->
+<svg style="display:none" id="vault-icon-def">
+  <symbol id="vault-icon-sm" viewBox="0 0 36 36">
+    <rect width="36" height="36" rx="8" fill="#111111" stroke="url(#lmetal)" stroke-width="1.2"/>
+    <circle cx="18" cy="18" r="11" fill="none" stroke="#a0a0a0" stroke-width="1.8"/>
+    <line x1="18" y1="7" x2="18" y2="11" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+    <line x1="18" y1="25" x2="18" y2="29" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+    <line x1="7"  y1="18" x2="11" y2="18" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+    <line x1="25" y1="18" x2="29" y2="18" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="18" cy="18" r="4" fill="#c9a84c"/>
+    <rect x="25" y="16" width="9" height="4" rx="2" fill="#888888"/>
+  </symbol>
+</svg>
+ 
 <!-- AUTH -->
 <div id="auth-screen">
   <div class="auth-box">
-    <div class="auth-logo metal-text">Vaultly</div>
+    <div class="auth-logo-wrap">
+      <svg width="40" height="40" viewBox="0 0 36 36">
+        <rect width="36" height="36" rx="8" fill="#111111" stroke="#a0a0a0" stroke-width="1.2"/>
+        <circle cx="18" cy="18" r="11" fill="none" stroke="#a0a0a0" stroke-width="1.8"/>
+        <line x1="18" y1="7"  x2="18" y2="11" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+        <line x1="18" y1="25" x2="18" y2="29" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+        <line x1="7"  y1="18" x2="11" y2="18" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+        <line x1="25" y1="18" x2="29" y2="18" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="18" cy="18" r="4" fill="#c9a84c"/>
+        <rect x="25" y="16" width="9" height="4" rx="2" fill="#888888"/>
+      </svg>
+      <div>
+        <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.6rem;letter-spacing:3px;text-transform:uppercase;background:linear-gradient(135deg,#fff 0%,#c0c0c0 40%,#808080 60%,#c0c0c0 80%,#fff 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Vaultly</div>
+      </div>
+    </div>
     <div class="auth-divider"></div>
-    <div class="auth-sub">Personal Finance Tracker</div>
+    <div class="auth-sub">Secure Your Stack</div>
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
       <button class="auth-tab" onclick="switchTab('register')">Register</button>
@@ -234,14 +389,42 @@
 <!-- APP -->
 <div id="app-screen">
   <div class="mobile-topbar">
-    <div class="mobile-topbar-logo metal-text">Vaultly</div>
+    <!-- Mini logo for mobile topbar -->
+    <div style="display:flex;align-items:center;gap:0.6rem;">
+      <svg width="28" height="28" viewBox="0 0 36 36">
+        <rect width="36" height="36" rx="8" fill="#111111" stroke="#a0a0a0" stroke-width="1.2"/>
+        <circle cx="18" cy="18" r="11" fill="none" stroke="#a0a0a0" stroke-width="1.8"/>
+        <line x1="18" y1="7"  x2="18" y2="11" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+        <line x1="18" y1="25" x2="18" y2="29" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+        <line x1="7"  y1="18" x2="11" y2="18" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+        <line x1="25" y1="18" x2="29" y2="18" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="18" cy="18" r="4" fill="#c9a84c"/>
+        <rect x="25" y="16" width="9" height="4" rx="2" fill="#888888"/>
+      </svg>
+      <span style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.1rem;letter-spacing:3px;text-transform:uppercase;background:linear-gradient(135deg,#fff,#c0c0c0,#808080,#c0c0c0,#fff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Vaultly</span>
+    </div>
     <div class="mobile-topbar-user" id="mobile-user-name">—</div>
   </div>
  
   <div class="layout">
     <div class="sidebar">
-      <div class="sidebar-logo metal-text">VT</div>
-      <div class="sidebar-accent"></div>
+      <!-- Sidebar brand -->
+      <div class="sidebar-brand">
+        <svg width="34" height="34" viewBox="0 0 36 36">
+          <rect width="36" height="36" rx="8" fill="#111111" stroke="#a0a0a0" stroke-width="1.2"/>
+          <circle cx="18" cy="18" r="11" fill="none" stroke="#a0a0a0" stroke-width="1.8"/>
+          <line x1="18" y1="7"  x2="18" y2="11" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+          <line x1="18" y1="25" x2="18" y2="29" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+          <line x1="7"  y1="18" x2="11" y2="18" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+          <line x1="25" y1="18" x2="29" y2="18" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="18" cy="18" r="4" fill="#c9a84c"/>
+          <rect x="25" y="16" width="9" height="4" rx="2" fill="#888888"/>
+        </svg>
+        <div>
+          <div class="sidebar-brand-text metal-text">Vaultly</div>
+        </div>
+      </div>
+      <div class="sidebar-gold-rule"></div>
       <div class="sidebar-user">
         <div class="sidebar-user-label">Signed in as</div>
         <div class="sidebar-user-name" id="user-name">—</div>
@@ -339,8 +522,13 @@
           <div class="page-rule"></div>
         </div>
         <div class="comparison-grid" id="comparison-grid">
-          <div class="comparison-card"><div class="empty-state">Loading...</div></div>
-          <div class="comparison-card"><div class="empty-state">Loading...</div></div>
+          <div class="comparison-card">
+            <div class="vault-spinner-wrap">
+              <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18" fill="none" stroke="#333" stroke-width="2" stroke-dasharray="6 3" class="ring-outer"/><circle cx="24" cy="24" r="6" fill="#c9a84c"/></svg>
+              <div class="vault-spinner-label">Loading</div>
+            </div>
+          </div>
+          <div class="comparison-card"></div>
         </div>
         <div class="chart-container">
           <div class="section-header" style="margin-bottom:1.5rem;"><div class="section-title">6 Month Overview</div></div>
@@ -379,13 +567,13 @@
           <div class="page-title metal-text">Microspend</div>
           <div class="page-rule"></div>
         </div>
-        <div class="microspend-box">
-          <div class="microspend-status">
-            <div class="microspend-dot" id="microspend-dot"></div>
-            <div class="microspend-label" id="microspend-status-label">Not configured</div>
+        <div class="feature-box">
+          <div class="feature-status">
+            <div class="feature-dot" id="microspend-dot"></div>
+            <div class="feature-label" id="microspend-status-label">Not configured</div>
           </div>
-          <div class="microspend-amount" id="microspend-current-amount">R 0.00</div>
-          <div class="microspend-sub">Auto-logged every Monday as an expense</div>
+          <div class="feature-amount" id="microspend-current-amount">R 0.00</div>
+          <div class="feature-sub">Auto-logged every Monday as an expense</div>
           <p style="font-size:0.72rem;color:var(--metal-dark);line-height:1.6;margin-bottom:1.5rem;">Microspend automatically records a weekly cash allowance every Monday — covering small daily purchases like food, transport, and miscellaneous spending that you don't want to log individually.</p>
           <div class="form-row" style="max-width:400px;">
             <div class="form-group" style="margin:0"><label>Weekly Amount (R)</label><input type="number" id="microspend-amount" placeholder="e.g. 200"/></div>
@@ -412,14 +600,19 @@
           <div class="page-title metal-text">Insights</div>
           <div class="page-rule"></div>
         </div>
-        <div class="insights-box">
-          <div class="microspend-status">
-            <div class="microspend-dot active"></div>
-            <div class="microspend-label">Powered by Claude AI</div>
+        <div class="feature-box">
+          <div class="feature-status">
+            <div class="feature-dot active"></div>
+            <div class="feature-label">Powered by Claude AI</div>
           </div>
           <p style="font-size:0.78rem;color:var(--metal-dark);line-height:1.7;margin-bottom:1.5rem;">Smart observations based on your spending patterns. This is not financial advice.</p>
           <div class="insights-content" id="insights-content"></div>
-          <div class="insights-loading" id="insights-loading">Analysing your finances...</div>
+          <div class="insights-loading" id="insights-loading">
+            <div class="vault-spinner-wrap" style="padding:1.5rem 0;">
+              <svg viewBox="0 0 48 48" style="width:36px;height:36px;"><circle cx="24" cy="24" r="18" fill="none" stroke="#333" stroke-width="2" stroke-dasharray="6 3" class="ring-outer"/><circle cx="24" cy="24" r="6" fill="#c9a84c"/></svg>
+              <div class="vault-spinner-label">Analysing your finances...</div>
+            </div>
+          </div>
           <div class="insights-disclaimer">These observations are generated by AI based on your transaction data and are for informational purposes only. They do not constitute financial advice.</div>
           <button class="add-btn" style="margin-top:1.5rem;" onclick="loadInsights()">Refresh Insights →</button>
         </div>
@@ -451,7 +644,24 @@
   let monthChart = null;
  
   document.getElementById('tx-date').valueAsDate = new Date();
-  if (token) showApp();
+ 
+  // Show vault loader then init
+  const loaderTexts = ['Unlocking vault...', 'Verifying credentials...', 'Loading your finances...'];
+  let ltIdx = 0;
+  const ltInterval = setInterval(() => {
+    ltIdx = (ltIdx + 1) % loaderTexts.length;
+    document.getElementById('loader-text').textContent = loaderTexts[ltIdx];
+  }, 800);
+ 
+  setTimeout(() => {
+    clearInterval(ltInterval);
+    const loader = document.getElementById('vault-loader');
+    loader.classList.add('fade-out');
+    setTimeout(() => { loader.style.display = 'none'; }, 600);
+    if (token) showApp(); else {
+      document.getElementById('auth-screen').style.display = 'flex';
+    }
+  }, 2200);
  
   function switchTab(tab) {
     document.querySelectorAll('.auth-tab').forEach((t, i) => {
@@ -525,8 +735,7 @@
   function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('userName');
-    token = null;
-    transactions = [];
+    token = null; transactions = [];
     document.getElementById('auth-screen').style.display = 'flex';
     document.getElementById('app-screen').style.display = 'none';
   }
@@ -535,9 +744,7 @@
     try {
       const res = await fetch(`${API}/transactions`, { headers: { 'Authorization': `Bearer ${token}` } });
       transactions = await res.json();
-      updateSummary();
-      renderRecentList();
-      renderTransactions();
+      updateSummary(); renderRecentList(); renderTransactions();
     } catch { showToast('Failed to load data', 'error'); }
   }
  
@@ -602,63 +809,29 @@
       const res = await fetch(`${API}/transactions/monthly-summary`, { headers: { 'Authorization': `Bearer ${token}` } });
       const data = await res.json();
       const months = {};
-      data.forEach(row => {
-        if (!months[row.month]) months[row.month] = { income: 0, expense: 0 };
-        months[row.month][row.type] = parseFloat(row.total);
-      });
+      data.forEach(row => { if (!months[row.month]) months[row.month] = { income: 0, expense: 0 }; months[row.month][row.type] = parseFloat(row.total); });
       const keys = Object.keys(months).sort().reverse();
       const thisMonth = months[keys[0]] || { income: 0, expense: 0 };
       const lastMonth = months[keys[1]] || { income: 0, expense: 0 };
       const thisBalance = thisMonth.income - thisMonth.expense;
       const lastBalance = lastMonth.income - lastMonth.expense;
-      function formatMonth(key) {
-        if (!key) return 'N/A';
-        const [y, m] = key.split('-');
-        return new Date(y, m - 1).toLocaleString('default', { month: 'long', year: 'numeric' });
-      }
-      function changeBadge(curr, prev) {
-        if (!prev) return '';
-        const pct = prev === 0 ? 100 : (((curr - prev) / prev) * 100).toFixed(0);
-        const cls = curr >= prev ? 'change-up' : 'change-down';
-        const arrow = curr >= prev ? '↑' : '↓';
-        return `<span class="change-badge ${cls}">${arrow} ${Math.abs(pct)}%</span>`;
-      }
+      function formatMonth(key) { if (!key) return 'N/A'; const [y, m] = key.split('-'); return new Date(y, m - 1).toLocaleString('default', { month: 'long', year: 'numeric' }); }
+      function changeBadge(curr, prev) { if (!prev) return ''; const pct = prev === 0 ? 100 : (((curr - prev) / prev) * 100).toFixed(0); const cls = curr >= prev ? 'change-up' : 'change-down'; const arrow = curr >= prev ? '↑' : '↓'; return `<span class="change-badge ${cls}">${arrow} ${Math.abs(pct)}%</span>`; }
       document.getElementById('comparison-grid').innerHTML = `
-        <div class="comparison-card">
-          <div class="comparison-month">${formatMonth(keys[0])} — This Month</div>
-          <div class="comparison-row"><div class="comparison-row-label">Income</div><div class="comparison-row-value" style="color:var(--green-text)">R ${thisMonth.income.toFixed(2)} ${changeBadge(thisMonth.income, lastMonth.income)}</div></div>
-          <div class="comparison-row"><div class="comparison-row-label">Expenses</div><div class="comparison-row-value" style="color:var(--red-text)">R ${thisMonth.expense.toFixed(2)} ${changeBadge(thisMonth.expense, lastMonth.expense)}</div></div>
-          <div class="comparison-row"><div class="comparison-row-label">Balance</div><div class="comparison-row-value" style="color:var(--white)">R ${thisBalance.toFixed(2)}</div></div>
-        </div>
-        <div class="comparison-card">
-          <div class="comparison-month">${formatMonth(keys[1])} — Last Month</div>
-          <div class="comparison-row"><div class="comparison-row-label">Income</div><div class="comparison-row-value" style="color:var(--green-text)">R ${lastMonth.income.toFixed(2)}</div></div>
-          <div class="comparison-row"><div class="comparison-row-label">Expenses</div><div class="comparison-row-value" style="color:var(--red-text)">R ${lastMonth.expense.toFixed(2)}</div></div>
-          <div class="comparison-row"><div class="comparison-row-label">Balance</div><div class="comparison-row-value" style="color:var(--white)">R ${lastBalance.toFixed(2)}</div></div>
-        </div>`;
+        <div class="comparison-card"><div class="comparison-month">${formatMonth(keys[0])} — This Month</div>
+        <div class="comparison-row"><div class="comparison-row-label">Income</div><div class="comparison-row-value" style="color:var(--green-text)">R ${thisMonth.income.toFixed(2)} ${changeBadge(thisMonth.income, lastMonth.income)}</div></div>
+        <div class="comparison-row"><div class="comparison-row-label">Expenses</div><div class="comparison-row-value" style="color:var(--red-text)">R ${thisMonth.expense.toFixed(2)} ${changeBadge(thisMonth.expense, lastMonth.expense)}</div></div>
+        <div class="comparison-row"><div class="comparison-row-label">Balance</div><div class="comparison-row-value" style="color:var(--white)">R ${thisBalance.toFixed(2)}</div></div></div>
+        <div class="comparison-card"><div class="comparison-month">${formatMonth(keys[1])} — Last Month</div>
+        <div class="comparison-row"><div class="comparison-row-label">Income</div><div class="comparison-row-value" style="color:var(--green-text)">R ${lastMonth.income.toFixed(2)}</div></div>
+        <div class="comparison-row"><div class="comparison-row-label">Expenses</div><div class="comparison-row-value" style="color:var(--red-text)">R ${lastMonth.expense.toFixed(2)}</div></div>
+        <div class="comparison-row"><div class="comparison-row-label">Balance</div><div class="comparison-row-value" style="color:var(--white)">R ${lastBalance.toFixed(2)}</div></div></div>`;
       const labels = keys.slice(0, 6).reverse().map(k => formatMonth(k).split(' ')[0]);
       const incomeData = keys.slice(0, 6).reverse().map(k => (months[k]?.income || 0));
       const expenseData = keys.slice(0, 6).reverse().map(k => (months[k]?.expense || 0));
       if (monthChart) monthChart.destroy();
       const ctx = document.getElementById('monthChart').getContext('2d');
-      monthChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: [
-            { label: 'Income', data: incomeData, backgroundColor: 'rgba(122,184,122,0.4)', borderColor: 'rgba(122,184,122,0.8)', borderWidth: 1 },
-            { label: 'Expenses', data: expenseData, backgroundColor: 'rgba(184,122,122,0.4)', borderColor: 'rgba(184,122,122,0.8)', borderWidth: 1 }
-          ]
-        },
-        options: {
-          responsive: true,
-          plugins: { legend: { labels: { color: '#a0a0a0', font: { family: 'Montserrat', size: 10 } } } },
-          scales: {
-            x: { ticks: { color: '#707070', font: { family: 'Montserrat', size: 10 } }, grid: { color: '#2a2a2a' } },
-            y: { ticks: { color: '#707070', font: { family: 'Montserrat', size: 10 }, callback: v => 'R' + v }, grid: { color: '#2a2a2a' } }
-          }
-        }
-      });
+      monthChart = new Chart(ctx, { type: 'bar', data: { labels, datasets: [{ label: 'Income', data: incomeData, backgroundColor: 'rgba(122,184,122,0.4)', borderColor: 'rgba(122,184,122,0.8)', borderWidth: 1 }, { label: 'Expenses', data: expenseData, backgroundColor: 'rgba(184,122,122,0.4)', borderColor: 'rgba(184,122,122,0.8)', borderWidth: 1 }] }, options: { responsive: true, plugins: { legend: { labels: { color: '#a0a0a0', font: { family: 'Montserrat', size: 10 } } } }, scales: { x: { ticks: { color: '#707070', font: { family: 'Montserrat', size: 10 } }, grid: { color: '#2a2a2a' } }, y: { ticks: { color: '#707070', font: { family: 'Montserrat', size: 10 }, callback: v => 'R' + v }, grid: { color: '#2a2a2a' } } } } });
     } catch(e) { console.error(e); }
   }
  
@@ -668,17 +841,7 @@
       const data = await res.json();
       const list = document.getElementById('recurring-list');
       if (!data.length) { list.innerHTML = '<div class="empty-state">No recurring transactions set up</div>'; return; }
-      list.innerHTML = data.map(r => `
-        <div class="recurring-item">
-          <div class="recurring-info">
-            <div class="recurring-name">${r.description || r.category}</div>
-            <div class="recurring-meta">${r.category} · Day ${r.day_of_month} of each month · ${r.type}</div>
-          </div>
-          <div class="recurring-right">
-            <div class="recurring-amount" style="color:${r.type === 'income' ? 'var(--green-text)' : 'var(--red-text)'}">${r.type === 'income' ? '+' : '−'} R ${parseFloat(r.amount).toFixed(2)}</div>
-            <button class="tx-delete" onclick="deleteRecurring(${r.id})">Remove</button>
-          </div>
-        </div>`).join('');
+      list.innerHTML = data.map(r => `<div class="recurring-item"><div class="recurring-info"><div class="recurring-name">${r.description || r.category}</div><div class="recurring-meta">${r.category} · Day ${r.day_of_month} of each month · ${r.type}</div></div><div class="recurring-right"><div class="recurring-amount" style="color:${r.type === 'income' ? 'var(--green-text)' : 'var(--red-text)'}">${r.type === 'income' ? '+' : '−'} R ${parseFloat(r.amount).toFixed(2)}</div><button class="tx-delete" onclick="deleteRecurring(${r.id})">Remove</button></div></div>`).join('');
     } catch { showToast('Failed to load recurring', 'error'); }
   }
  
@@ -703,8 +866,7 @@
   async function deleteRecurring(id) {
     try {
       await fetch(`${API}/transactions/recurring/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
-      showToast('Removed', 'success');
-      loadRecurring();
+      showToast('Removed', 'success'); loadRecurring();
     } catch { showToast('Failed to delete', 'error'); }
   }
  
@@ -715,16 +877,8 @@
       const dot = document.getElementById('microspend-dot');
       const label = document.getElementById('microspend-status-label');
       const amount = document.getElementById('microspend-current-amount');
-      if (data && data.active) {
-        dot.classList.add('active');
-        label.textContent = 'Active — logs every Monday';
-        amount.textContent = `R ${parseFloat(data.amount).toFixed(2)} / week`;
-        document.getElementById('microspend-amount').value = data.amount;
-      } else {
-        dot.classList.remove('active');
-        label.textContent = 'Not configured';
-        amount.textContent = 'R 0.00';
-      }
+      if (data && data.active) { dot.classList.add('active'); label.textContent = 'Active — logs every Monday'; amount.textContent = `R ${parseFloat(data.amount).toFixed(2)} / week`; document.getElementById('microspend-amount').value = data.amount; }
+      else { dot.classList.remove('active'); label.textContent = 'Not configured'; amount.textContent = 'R 0.00'; }
     } catch {}
   }
  
@@ -734,33 +888,27 @@
     try {
       const res = await fetch(`${API}/transactions/microspend`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ amount: parseFloat(amount) }) });
       if (!res.ok) throw new Error();
-      showToast('Microspend saved', 'success');
-      loadMicrospend();
+      showToast('Microspend saved', 'success'); loadMicrospend();
     } catch { showToast('Failed to save', 'error'); }
   }
  
   async function disableMicrospend() {
     try {
       await fetch(`${API}/transactions/microspend`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
-      showToast('Microspend disabled', 'success');
-      loadMicrospend();
+      showToast('Microspend disabled', 'success'); loadMicrospend();
     } catch { showToast('Failed to disable', 'error'); }
   }
  
   async function loadInsights() {
     const content = document.getElementById('insights-content');
     const loading = document.getElementById('insights-loading');
-    content.textContent = '';
-    loading.style.display = 'block';
+    content.textContent = ''; loading.style.display = 'block';
     try {
       const res = await fetch(`${API}/insights`, { headers: { 'Authorization': `Bearer ${token}` } });
       const data = await res.json();
       loading.style.display = 'none';
       content.textContent = data.insight || 'No insights available yet.';
-    } catch {
-      loading.style.display = 'none';
-      content.textContent = 'Failed to load insights. Try again.';
-    }
+    } catch { loading.style.display = 'none'; content.textContent = 'Failed to load insights. Try again.'; }
   }
  
   function showPage(name, el) {
@@ -793,11 +941,9 @@
  
   function showToast(msg, type) {
     const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = `toast ${type} show`;
+    t.textContent = msg; t.className = `toast ${type} show`;
     setTimeout(() => t.classList.remove('show'), 3000);
   }
 </script>
 </body>
 </html>
- 
