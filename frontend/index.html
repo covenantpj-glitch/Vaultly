@@ -688,7 +688,7 @@
     } catch { showError('login-error', 'Cannot connect to server'); }
   }
  
-  async function verifyOTP() {
+async function verifyOTP() {
     const otp = document.getElementById('otp-input').value;
     if (!otp || otp.length !== 6) return showError('otp-error', 'Enter the 6-digit code');
     try {
@@ -698,9 +698,21 @@
       localStorage.setItem('token', data.token);
       localStorage.setItem('userName', data.name);
       token = data.token;
-      showApp();
+      // Show vault unlock animation
+      const loader = document.getElementById('vault-loader');
+      loader.style.display = 'flex';
+      loader.style.opacity = '1';
+      document.getElementById('loader-text').textContent = 'Vault unlocked ✓';
+      setTimeout(() => {
+        loader.classList.add('fade-out');
+        setTimeout(() => {
+          loader.style.display = 'none';
+          showApp();
+        }, 600);
+      }, 1800);
     } catch { showError('otp-error', 'Cannot connect to server'); }
   }
+  
  
   function backToLogin() {
     document.getElementById('otp-form').style.display = 'none';
