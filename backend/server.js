@@ -3,9 +3,9 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-
 const authRoutes = require('./routes/auth');
 const transactionRoutes = require('./routes/transactions');
+const insightsRoutes = require('./routes/insights');
 
 const app = express();
 app.set('trust proxy', 1);
@@ -42,6 +42,7 @@ app.use('/api/auth', authLimiter);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/transactions', transactionRoutes);
+app.use('/api/insights', insightsRoutes);
 
 app.get('/', (req, res) => res.json({ message: 'Vaultly API running ✅' }));
 
