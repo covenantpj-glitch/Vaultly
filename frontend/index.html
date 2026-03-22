@@ -645,23 +645,10 @@
  
   document.getElementById('tx-date').valueAsDate = new Date();
  
-  // Show vault loader then init
-  const loaderTexts = ['Unlocking vault...', 'Verifying credentials...', 'Loading your finances...'];
-  let ltIdx = 0;
-  const ltInterval = setInterval(() => {
-    ltIdx = (ltIdx + 1) % loaderTexts.length;
-    document.getElementById('loader-text').textContent = loaderTexts[ltIdx];
-  }, 800);
- 
-  setTimeout(() => {
-    clearInterval(ltInterval);
-    const loader = document.getElementById('vault-loader');
-    loader.classList.add('fade-out');
-    setTimeout(() => { loader.style.display = 'none'; }, 600);
-    if (token) showApp(); else {
-      document.getElementById('auth-screen').style.display = 'flex';
-    }
-  }, 2200);
+  // Skip loader on page open — go straight to auth or app
+  document.getElementById('vault-loader').style.display = 'none';
+  if (token) showApp();
+  else document.getElementById('auth-screen').style.display = 'flex';
  
   function switchTab(tab) {
     document.querySelectorAll('.auth-tab').forEach((t, i) => {
